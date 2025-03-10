@@ -10,7 +10,7 @@ using System.Net;
 
 namespace AirportControlTower.API.Application.Commands
 {
-    public class RequestChangeCommand : IRequest
+    public class RequestStateChangeCommand : IRequest
     {
         public string CallSign { get; set; } = default!;
         public AirlineStateTrigger State { get; set; }
@@ -18,11 +18,11 @@ namespace AirportControlTower.API.Application.Commands
 
     public class RequestChangeCommandHandler(AppDbContext dbContext,
         ILogger<RequestChangeCommandHandler> logger,
-        IOptions<AirportSpecs> airportSpecsOptions) : IRequestHandler<RequestChangeCommand>
+        IOptions<AirportSpecs> airportSpecsOptions) : IRequestHandler<RequestStateChangeCommand>
     {
         readonly AirportSpecs airportSpecs = airportSpecsOptions.Value;
         Airline airline = default!;
-        public async Task Handle(RequestChangeCommand command, CancellationToken cancellationToken)
+        public async Task Handle(RequestStateChangeCommand command, CancellationToken cancellationToken)
         {
             airline = await GetAirlineAsync(command.CallSign);
 

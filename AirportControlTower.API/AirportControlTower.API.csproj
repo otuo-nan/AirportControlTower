@@ -22,7 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Application\Dtos\" />
     <Folder Include="Application\Queries\" />
+    <Folder Include="Application\Services\" />
   </ItemGroup>
 
 </Project>
