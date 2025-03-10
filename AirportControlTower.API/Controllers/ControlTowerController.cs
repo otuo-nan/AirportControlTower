@@ -1,7 +1,9 @@
 ﻿using AirportControlTower.API.Application.Commands;
+using AirportControlTower.API.Infrastructure.Authentication;
 using AirportControlTower.API.Infrastructure.Database;
 using AirportControlTower.API.Models;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
@@ -9,6 +11,7 @@ using static AirportControlTower.API.Application.Requests.ControlTowerRequests;
 
 namespace AirportControlTower.API.Controllers
 {
+    [ApiKeyAuthorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ControlTowerController : ControllerBase
@@ -41,6 +44,11 @@ namespace AirportControlTower.API.Controllers
         [HttpGet("all-airlines")]
         public async Task<IActionResult> AllAirlines([FromServices] AppDbContext dbContext, AirlineState state)
         {
+            if (state == 0)
+            {
+                return Ok(await dbContext.Airlines.AsNoTracking().ToListAsync());
+            }
+
             return Ok(await dbContext.Airlines.AsNoTracking().Where(a => a.State == state).ToListAsync());
         }
     }

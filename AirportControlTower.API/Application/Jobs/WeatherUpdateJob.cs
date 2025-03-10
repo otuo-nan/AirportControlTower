@@ -1,4 +1,5 @@
 ﻿using AirportControlTower.API.Application.Services;
+using AirportControlTower.API.Infrastructure;
 using Quartz;
 
 namespace AirportControlTower.API.Application.Jobs
@@ -11,6 +12,7 @@ namespace AirportControlTower.API.Application.Jobs
             try
             {
                 logger.LogInformation("Starting weather update job at: {time}", DateTime.UtcNow);
+
                 await weatherService.UpdateLocalWeatherStoreAsync();
                 logger.LogInformation("Completed weather update job at: {time}", DateTime.UtcNow);
             }

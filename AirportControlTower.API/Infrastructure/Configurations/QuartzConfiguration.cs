@@ -31,7 +31,6 @@ namespace AirportControlTower.API.Infrastructure.Configurations
                     .WithIdentity($"{nameof(WeatherUpdateJob)}-trigger")
                     .WithSimpleSchedule(x => x
                         .WithIntervalInMinutes(5)
-                        //.WithIntervalInSeconds(60)
                         .RepeatForever())
                 );
             });

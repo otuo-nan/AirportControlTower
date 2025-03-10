@@ -1,10 +1,13 @@
 using AirportControlTower.API.Application.Services;
 using AirportControlTower.API.Infrastructure;
+using AirportControlTower.API.Infrastructure.Authentication;
 using AirportControlTower.API.Infrastructure.Configurations;
 using AirportControlTower.API.Infrastructure.Database;
 using AirportControlTower.API.Infrastructure.Workers;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Quartz;
 
 namespace AirportControlTower.API
@@ -21,9 +24,13 @@ namespace AirportControlTower.API
                 configure.Filters.Add<HttpGlobalExceptionFilter>();
             });
 
+            builder.Services.AddScoped<IApiKeyValidator, ApiKeyValidator>();
+
+            builder.Services.AddAuthentication(ApiKeyAuthenticationDefaults.AuthenticationScheme)
+                    .AddScheme<AuthenticationSchemeOptions, ApiKeyAuthenticationHandler>(ApiKeyAuthenticationDefaults.AuthenticationScheme, null);
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
 
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
 
@@ -58,6 +65,35 @@ namespace AirportControlTower.API
             builder.Services.AddQuartzJobs();
             builder.Services.AddHostedService<DbSeeder>();
 
+            builder.Services.AddAuthorization();
+
+            builder.Services.AddSwaggerGen(option =>
+            {
+                option.SwaggerDoc("v1", new OpenApiInfo { Title = "AirportControlTower.API", Version = "v1" });
+                option.AddSecurityDefinition("API Key", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter a valid key",
+                    Name = "X-API-KEY",
+                    Type = SecuritySchemeType.ApiKey,
+                });
+
+                option.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "API Key"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+               });
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -67,6 +103,7 @@ namespace AirportControlTower.API
                 app.UseSwaggerUI();
             }
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
