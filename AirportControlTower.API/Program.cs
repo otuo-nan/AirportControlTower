@@ -5,6 +5,7 @@ using AirportControlTower.API.Infrastructure.Database;
 using AirportControlTower.API.Infrastructure.Workers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Quartz;
 
 namespace AirportControlTower.API
 {
@@ -54,6 +55,7 @@ namespace AirportControlTower.API
                 options.BaseAddress = new Uri(builder.Configuration["OpenWeatherApi:BaseUrl"]!);
             });
 
+            builder.Services.AddQuartzJobs();
             builder.Services.AddHostedService<DbSeeder>();
 
             var app = builder.Build();

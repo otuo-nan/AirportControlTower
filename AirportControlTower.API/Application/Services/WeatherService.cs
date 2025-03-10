@@ -29,7 +29,7 @@ namespace AirportControlTower.API.Application.Services
             {
                 var openWeather = await GetWeatherInformationAsync(airline.LastKnownPosition);
 
-                return await SaveWeatherInformation(airline.Id, openWeather);
+                return await CreateWeatherAsync(airline.Id, openWeather);
             }
         }
 
@@ -46,7 +46,7 @@ namespace AirportControlTower.API.Application.Services
                 var airline = await GetAirlineAsync(weather.AirlineId);
                 var openWeather = await GetWeatherInformationAsync(airline.LastKnownPosition);
 
-                await SaveWeatherInformation(airline.Id, openWeather);
+                await UpdateWeatherAsync(airline.Id, openWeather);
             }
         }
 
@@ -61,7 +61,7 @@ namespace AirportControlTower.API.Application.Services
         {
             return await dbContext.Airlines.FirstAsync(a => a.Id == id);
         }
-        
+
         async Task<Weather?> GetAirlineWeatherAsync(Guid airlineId)
         {
             return await dbContext.Weather.FirstOrDefaultAsync(a => a.AirlineId == airlineId);
@@ -75,30 +75,42 @@ namespace AirportControlTower.API.Application.Services
             return JsonSerializer.Deserialize<WeatherInformation>(content, Utility.SerializerOptions)!;
         }
 
-        async Task<WeatherData> SaveWeatherInformation(Guid airlineId, WeatherInformation openWeather)
+        async Task<WeatherData> CreateWeatherAsync(Guid airlineId, WeatherInformation openWeather)
         {
             var weather = new Weather
             {
                 AirlineId = airlineId,
-                Data = new WeatherData
-                {
-                    Description = openWeather.Weather.First().Description,
-                    Temperature = (int)openWeather.Main.Temp,
-                    Visibility = openWeather.Visibility,
-                    Wind = new Models.Wind
-                    {
-                        Speed = openWeather.Wind.Speed,
-                        Deg = openWeather.Wind.Deg
-                    },
-                    LastUpdate = Utility.GetDateTimeNow
-                },
-                LastUpdate = DateTime.UtcNow
+                Data = MapOpenWeatherToWeatherData(openWeather),
+                LastUpdate = DateTime.UtcNow,
             };
 
             await dbContext.Weather.AddAsync(weather);
             await dbContext.SaveChangesAsync();
 
             return weather.Data;
+        }
+
+        async Task UpdateWeatherAsync(Guid airlineId, WeatherInformation openWeather)
+        {
+            await dbContext.Weather.Where(w => w.AirlineId == airlineId).ExecuteUpdateAsync(setter =>
+                            setter.SetProperty(p => p.Data, MapOpenWeatherToWeatherData(openWeather))
+                                  .SetProperty(p => p.LastUpdate, DateTime.UtcNow));
+        }
+
+        static WeatherData MapOpenWeatherToWeatherData(WeatherInformation openWeather)
+        {
+            return new WeatherData
+            {
+                Description = openWeather.Weather.First().Description,
+                Temperature = (int)openWeather.Main.Temp,
+                Visibility = openWeather.Visibility,
+                Wind = new Models.Wind
+                {
+                    Speed = openWeather.Wind.Speed,
+                    Deg = openWeather.Wind.Deg
+                },
+                LastUpdate = Utility.GetDateTimeNow
+            };
         }
 
         #endregion helpers
