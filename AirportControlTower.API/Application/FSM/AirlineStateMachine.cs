@@ -14,8 +14,7 @@ namespace AirportControlTower.API.Application.FSM
         readonly StateMachine<AirlineState, AirlineStateTrigger> _stateMachine;
         public AirlineStateMachine(Airline airline,
             bool isRunwayAvailable, //is available also if there are parking slots, if can land even when there are no parking slots, its assumed runaway cannot be used, so why land on it in the first place
-            bool isRunwayApproachable
-            )
+            bool isRunwayApproachable)
         {
             _stateMachine = new StateMachine<AirlineState, AirlineStateTrigger>(() => airline.State, s => airline.State = s);
 
@@ -57,7 +56,7 @@ namespace AirportControlTower.API.Application.FSM
            });
         }
 
-        public virtual void Fire(AirlineStateTrigger trigger)
+        public void Fire(AirlineStateTrigger trigger)
         {
             _stateMachine.Fire(trigger);
         }
@@ -67,12 +66,12 @@ namespace AirportControlTower.API.Application.FSM
             return _stateMachine.CanFire(trigger);
         }
 
-        protected virtual void OnStateChanged(TransitionChangedEventArgs e)
+        void OnStateChanged(TransitionChangedEventArgs e)
         {
             StateChanged?.Invoke(this, e);
         }
 
-        protected virtual void OnStateChangedFailed(TransitionChangedFailedEventArgs e)
+        void OnStateChangedFailed(TransitionChangedFailedEventArgs e)
         {
             StateChangedFailed?.Invoke(this, e);
         }

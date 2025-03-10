@@ -22,16 +22,17 @@ namespace AirportControlTower.API.Application.Commands
     {
         readonly AirportSpecs airportSpecs = airportSpecsOptions.Value;
         Airline airline = default!;
+        int AvailableParkingSlots => airline.Type == AirlineType.Airliner ? airportSpecs.AirlineParkingSlots : airportSpecs.PrivateParkingSlots;
+
         public async Task Handle(RequestStateChangeCommand command, CancellationToken cancellationToken)
         {
             airline = await GetAirlineAsync(command.CallSign);
 
-            var fsm = new AirlineStateMachine(airline, await VerifyRunwayAvailability(), await VerifyRunwayApproachability());
-            fsm.StateChanged += StateChanged;
-            fsm.StateChangedFailed += StateChangedFailed;
+            var sm = new AirlineStateMachine(airline, await VerifyRunwayAvailability(), await IsRunwayApproachable());
+            sm.StateChanged += StateChanged;
+            sm.StateChangedFailed += StateChangedFailed;
 
-            fsm.Fire(command.State);
-
+            sm.Fire(command.State);
 
             void StateChangedFailed(object? sender, TransitionChangedFailedEventArgs e)
             {
@@ -64,12 +65,11 @@ namespace AirportControlTower.API.Application.Commands
             return await dbContext.Airlines.CountAsync(a => a.State == AirlineState.Parked && a.Type == airline.Type) < AvailableParkingSlots;
         }
 
-        int AvailableParkingSlots => airline.Type == AirlineType.Airliner ? airportSpecs.AirlineParkingSlots : airportSpecs.PrivateParkingSlots;
-
-        async Task<bool> VerifyRunwayApproachability()
+        async Task<bool> IsRunwayApproachable()
         {
-            return await dbContext.Airlines.AnyAsync(a => a.State != AirlineState.Approach);
+            return await dbContext.Airlines.CountAsync(a => a.State == AirlineState.Approach) == 0;
         }
+
         void StateChanged(object? sender, TransitionChangedEventArgs e)
         {
             dbContext.StateChangeHistory.Add(CreateHistory(HistoryStatus.Accepted));
