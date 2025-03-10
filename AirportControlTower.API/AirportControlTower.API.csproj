@@ -21,10 +21,4 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Application\Dtos\" />
-    <Folder Include="Application\Queries\" />
-    <Folder Include="Application\Services\" />
-  </ItemGroup>
-
 </Project>

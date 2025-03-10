@@ -1,3 +1,4 @@
+using AirportControlTower.API.Application.Services;
 using AirportControlTower.API.Infrastructure;
 using AirportControlTower.API.Infrastructure.Configurations;
 using AirportControlTower.API.Infrastructure.Database;
@@ -26,6 +27,7 @@ namespace AirportControlTower.API
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
 
             builder.Services.Configure<AirportSpecs>(builder.Configuration.GetSection("AirportSpecs"));
+            builder.Services.Configure<OpenWeatherApi>(builder.Configuration.GetSection("OpenWeatherApi"));
 
             builder.Services.AddDbContext<AppDbContext>(options =>
             {
@@ -45,6 +47,11 @@ namespace AirportControlTower.API
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
                 options.User.RequireUniqueEmail = true;
+            });
+
+            builder.Services.AddHttpClient<WeatherService>(options =>
+            {
+                options.BaseAddress = new Uri(builder.Configuration["OpenWeatherApi:BaseUrl"]!);
             });
 
             builder.Services.AddHostedService<DbSeeder>();

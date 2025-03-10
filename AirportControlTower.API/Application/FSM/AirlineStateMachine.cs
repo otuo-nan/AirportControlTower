@@ -16,7 +16,12 @@ namespace AirportControlTower.API.Application.FSM
             bool isRunwayAvailable,
             bool isRunwayApproachable)
         {
-            _stateMachine = new StateMachine<AirlineState, AirlineStateTrigger>(() => airline.State, s => airline.State = s);
+            _stateMachine = new StateMachine<AirlineState, AirlineStateTrigger>(() =>
+            airline.State, s =>
+            {
+                airline.State = s;
+                airline.LastUpdate = DateTime.UtcNow;
+            });
 
             _stateMachine.Configure(AirlineState.Parked)
                 .PermitIf(AirlineStateTrigger.TakeOff, AirlineState.TakingOff, () => isRunwayAvailable, runwayAvailabilityGuardDescription);

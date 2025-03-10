@@ -9,6 +9,7 @@ namespace AirportControlTower.API.Infrastructure.Database
     public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<IdentityUser>(options)
     {
         public DbSet<Airline> Airlines { get; set; }
+        public DbSet<Weather> Weather { get; set; }
         public DbSet<StateChangeHistory> StateChangeHistory { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -18,6 +19,7 @@ namespace AirportControlTower.API.Infrastructure.Database
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new AirlineConfiguration());
+            builder.ApplyConfiguration(new WeatherConfiguration());
 
             base.OnModelCreating(builder);
         }

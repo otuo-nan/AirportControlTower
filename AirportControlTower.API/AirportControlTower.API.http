@@ -4,3 +4,4 @@ GET {{AirportControlTower.API_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+GET https://api.openweathermap.org/data/2.5/weather?lat=44.82128505247063&lon=20.455516172478386&exclude=minutely,hourly,daily,alerts&appid=1a1f91e2241e9056cf2dd4f9cf66e8da

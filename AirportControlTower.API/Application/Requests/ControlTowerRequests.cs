@@ -4,9 +4,11 @@ namespace AirportControlTower.API.Application.Requests
 {
     public class ControlTowerRequests
     {
-        public class RequestStateChange
+        public class ChangeState
         {
             public AirlineStateTrigger State { get; set; }
         }
+
+        public class SharedLocation : Position { }
     }
 }

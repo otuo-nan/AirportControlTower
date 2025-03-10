@@ -16,9 +16,25 @@ namespace AirportControlTower.API.Controllers
         [HttpPost("{call_sign}/intent")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
-        public async Task<IActionResult> Intent(string call_sign, [FromBody] RequestStateChange request, [FromServices] IMediator mediator)
+        public async Task<IActionResult> Intent(string call_sign, [FromBody] ChangeState request, [FromServices] IMediator mediator)
         {
             await mediator.Send(new RequestStateChangeCommand { State = request.State, CallSign = call_sign });
+            return NoContent();
+        }
+
+        [HttpPost("{call_sign}/location")]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict)]
+        public async Task<IActionResult> Location(string call_sign, [FromBody] SharedLocation request, [FromServices] IMediator mediator)
+        {
+            await mediator.Send(new ShareLastKnownLocationCommand
+            {
+                CallSign = call_sign,
+                Latitude = request.Latitude,
+                Longitude = request.Longitude,
+                Altitude = request.Altitude,
+                Heading = request.Heading
+            });
             return NoContent();
         }
 

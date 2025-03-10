@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using AirportControlTower.API.Models;
 using System.Text.Json;
+using AirportControlTower.API.Application.Dtos;
 
 namespace AirportControlTower.API.Infrastructure.Database.Configurations
 {
@@ -13,6 +14,18 @@ namespace AirportControlTower.API.Infrastructure.Database.Configurations
                   .HasConversion(
                       v => JsonSerializer.Serialize(v, Utility.SerializerOptions),
                       v => JsonSerializer.Deserialize<Position>(v, Utility.SerializerOptions)!
+                  );
+        }
+    }
+    
+    public class WeatherConfiguration : IEntityTypeConfiguration<Weather>
+    {
+        public void Configure(EntityTypeBuilder<Weather> entity)
+        {
+            entity.Property(p => p.Data)
+                  .HasConversion(
+                      v => JsonSerializer.Serialize(v, Utility.SerializerOptions),
+                      v => JsonSerializer.Deserialize<WeatherData>(v, Utility.SerializerOptions)!
                   );
         }
     }
