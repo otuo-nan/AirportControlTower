@@ -1,0 +1,282 @@
+[
+  {
+    "id": "C88ED821-A0CC-4952-867A-08DD563E87DE",
+    "name": "Delta Air Lines",
+    "state": "Airborne",
+    "type": "Airliner",
+    "callSign": "DAL1847",
+    "lastKnownPosition": {
+      "latitude": 40.7128,
+      "longitude": -74.0060,
+      "altitude": 35000.0,
+      "heading": 270.5
+    },
+    "lastUpdate": "2025-03-09T21:31:49Z"
+  },
+  {
+    "id": "3CFFFCB2-5032-4FA8-867B-08DD563E87DE",
+    "name": "United Airlines",
+    "state": "TakingOff",
+    "type": "Airliner",
+    "callSign": "UAL2391",
+    "lastKnownPosition": {
+      "latitude": 41.9786,
+      "longitude": -87.9048,
+      "altitude": 1200.0,
+      "heading": 90.0
+    },
+    "lastUpdate": "2025-03-09T21:31:30Z"
+  },
+  {
+    "id": "4A3F5850-396B-4DC5-1FB5-08DD56634162",
+    "name": "Emirates",
+    "state": "Airborne",
+    "type": "Airliner",
+    "callSign": "UAE231",
+    "lastKnownPosition": {
+      "latitude": 25.2532,
+      "longitude": 55.3657,
+      "altitude": 3000.0,
+      "heading": 180.0
+    },
+    "lastUpdate": "2025-03-09T21:30:49Z"
+  },
+  {
+    "id": "734B6E05-5C40-4445-1FB6-08DD56634162",
+    "name": "NetJets Aviation",
+    "state": "Parked",
+    "type": "Private",
+    "callSign": "EJA542",
+    "lastKnownPosition": {
+      "latitude": 33.6367,
+      "longitude": -84.4281,
+      "altitude": 0.0,
+      "heading": 0.0
+    },
+    "lastUpdate": "2025-03-09T21:29:49Z"
+  },
+  {
+    "id": "67BD1B12-949F-463C-1FB7-08DD56634162",
+    "name": "Lufthansa",
+    "state": "Airborne",
+    "type": "Airliner",
+    "callSign": "DLH419",
+    "lastKnownPosition": {
+      "latitude": 50.0379,
+      "longitude": 8.5622,
+      "altitude": 38000.0,
+      "heading": 315.0
+    },
+    "lastUpdate": "2025-03-09T21:32:00Z"
+  },
+  {
+    "id": "C71377FD-57BF-4A43-1FB8-08DD56634162",
+    "name": "Air France",
+    "state": "Parked",
+    "type": "Airliner",
+    "callSign": "AFR382",
+    "lastKnownPosition": {
+      "latitude": 49.0097,
+      "longitude": 2.5479,
+      "altitude": 0.0,
+      "heading": 90.0
+    },
+    "lastUpdate": "2025-03-09T21:28:49Z"
+  },
+  {
+    "id": "D5327B03-0D23-40E5-1FB9-08DD56634162",
+    "name": "Vista Jet",
+    "state": "Airborne",
+    "type": "Private",
+    "callSign": "VJT824",
+    "lastKnownPosition": {
+      "latitude": 47.3769,
+      "longitude": 8.5417,
+      "altitude": 41000.0,
+      "heading": 45.0
+    },
+    "lastUpdate": "2025-03-09T21:31:40Z"
+  },
+  {
+    "id": "4B149E8C-4C96-45F3-1FBA-08DD56634162",
+    "name": "American Airlines",
+    "state": "Parked",
+    "type": "Airliner",
+    "callSign": "AAL1923",
+    "lastKnownPosition": {
+      "latitude": 32.8968,
+      "longitude": -97.0380,
+      "altitude": 800.0,
+      "heading": 225.0
+    },
+    "lastUpdate": "2025-03-09T21:31:45Z"
+  },
+  {
+    "id": "2FF58855-E1E3-4815-1FBB-08DD56634162",
+    "name": "Qatar Airways",
+    "state": "Airborne",
+    "type": "Airliner",
+    "callSign": "QTR781",
+    "lastKnownPosition": {
+      "latitude": 25.2866,
+      "longitude": 51.5310,
+      "altitude": 36000.0,
+      "heading": 135.0
+    },
+    "lastUpdate": "2025-03-09T21:30:49Z"
+  },
+  {
+    "id": "0D07A170-13DF-43E6-1FBC-08DD56634162",
+    "name": "Flexjet",
+    "state": "Parked",
+    "type": "Private",
+    "callSign": "FLX238",
+    "lastKnownPosition": {
+      "latitude": 26.0742,
+      "longitude": -80.1506,
+      "altitude": 0.0,
+      "heading": 0.0
+    },
+    "lastUpdate": "2025-03-09T21:27:49Z"
+  },
+  {
+    "id": "D02FB81F-D44D-4FE9-1FBD-08DD56634162",
+    "name": "British Airways",
+    "state": "Airborne",
+    "type": "Airliner",
+    "callSign": "BAW285",
+    "lastKnownPosition": {
+      "latitude": 51.4700,
+      "longitude": -0.4543,
+      "altitude": 2500.0,
+      "heading": 270.0
+    },
+    "lastUpdate": "2025-03-09T21:31:30Z"
+  },
+  {
+    "id": "660AA893-6AE1-4E7D-1FBE-08DD56634162",
+    "name": "Singapore Airlines",
+    "state": "Airborne",
+    "type": "Airliner",
+    "callSign": "SIA326",
+    "lastKnownPosition": {
+      "latitude": 1.3521,
+      "longitude": 103.8198,
+      "altitude": 39000.0,
+      "heading": 45.0
+    },
+    "lastUpdate": "2025-03-09T21:31:20Z"
+  },
+  {
+    "id": "A5F5D82E-D473-4E68-1FBF-08DD56634162",
+    "name": "Wheels Up",
+    "state": "Parked",
+    "type": "Private",
+    "callSign": "WUP647",
+    "lastKnownPosition": {
+      "latitude": 40.6413,
+      "longitude": -73.7781,
+      "altitude": 0.0,
+      "heading": 180.0
+    },
+    "lastUpdate": "2025-03-09T21:26:49Z"
+  },
+  {
+    "id": "E01D07AE-C45B-4D91-1FC1-08DD56634162",
+    "name": "Air Canada",
+    "state": "Airborne",
+    "type": "Airliner",
+    "callSign": "ACA951",
+    "lastKnownPosition": {
+      "latitude": 43.6777,
+      "longitude": -79.6248,
+      "altitude": 33000.0,
+      "heading": 90.0
+    },
+    "lastUpdate": "2025-03-09T21:31:15Z"
+  },
+  {
+    "id": "5CAFFDE0-9BA0-4004-1FC2-08DD56634162",
+    "name": "KLM Royal Dutch",
+    "state": "Airborne",
+    "type": "Airliner",
+    "callSign": "KLM642",
+    "lastKnownPosition": {
+      "latitude": 52.3086,
+      "longitude": 4.7639,
+      "altitude": 1500.0,
+      "heading": 315.0
+    },
+    "lastUpdate": "2025-03-09T21:31:40Z"
+  },
+  {
+    "id": "834298A0-51AC-42CB-1FC3-08DD56634162",
+    "name": "Cathay Pacific",
+    "state": "Airborne",
+    "type": "Airliner",
+    "callSign": "CPA189",
+    "lastKnownPosition": {
+      "latitude": 22.3080,
+      "longitude": 113.9185,
+      "altitude": 37000.0,
+      "heading": 225.0
+    },
+    "lastUpdate": "2025-03-09T21:30:49Z"
+  },
+  {
+    "id": "59EA917F-C2F0-4DA1-1FC4-08DD56634162",
+    "name": "VistaJet Malta",
+    "state": "Parked",
+    "type": "Private",
+    "callSign": "VJT452",
+    "lastKnownPosition": {
+      "latitude": 35.8989,
+      "longitude": 14.5146,
+      "altitude": 0.0,
+      "heading": 0.0
+    },
+    "lastUpdate": "2025-03-09T21:29:49Z"
+  },
+  {
+    "id": "F05293D4-ACED-4758-1FC5-08DD56634162",
+    "name": "Turkish Airlines",
+    "state": "Approach",
+    "type": "Airliner",
+    "callSign": "THY734",
+    "lastKnownPosition": {
+      "latitude": 41.2619,
+      "longitude": 28.7417,
+      "altitude": 4000.0,
+      "heading": 180.0
+    },
+    "lastUpdate": "2025-03-09T21:31:35Z"
+  },
+  {
+    "id": "F9802B2F-91D2-445D-1FC6-08DD56634162",
+    "name": "Swiss Air Lines",
+    "state": "Parked",
+    "type": "Airliner",
+    "callSign": "SWR345",
+    "lastKnownPosition": {
+      "latitude": 47.4582,
+      "longitude": 8.5555,
+      "altitude": 0.0,
+      "heading": 0.0
+    },
+    "lastUpdate": "2025-03-09T21:28:49Z"
+  },
+  {
+    "id": "4B7B4B46-1309-4BFC-1FC7-08DD56634162",
+    "name": "Bombardier Aviation",
+    "state": "Airborne",
+    "type": "Private",
+    "callSign": "BBA891",
+    "lastKnownPosition": {
+      "latitude": 45.5017,
+      "longitude": -73.5673,
+      "altitude": 42000.0,
+      "heading": 90.0
+    },
+    "lastUpdate": "2025-03-09T21:31:25Z"
+  }
+]
