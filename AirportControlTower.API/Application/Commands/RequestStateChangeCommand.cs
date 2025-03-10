@@ -28,7 +28,7 @@ namespace AirportControlTower.API.Application.Commands
         {
             airline = await GetAirlineAsync(command.CallSign);
 
-            var sm = new AirlineStateMachine(airline, await VerifyRunwayAvailability(), await IsRunwayApproachable());
+            var sm = new AirlineStateMachine(airline, await IsRunwayAvailable(), await IsRunwayApproachable());
             sm.StateChanged += StateChanged;
             sm.StateChangedFailed += StateChangedFailed;
 
@@ -48,7 +48,7 @@ namespace AirportControlTower.API.Application.Commands
             return await dbContext.Airlines.FirstAsync(a => a.CallSign == callSign);
         }
 
-        async Task<bool> VerifyRunwayAvailability()
+        async Task<bool> IsRunwayAvailable()
         {
             //check if there are any aircrafts on the runway
             //check if parking lots are available for this type of aircraft
@@ -67,7 +67,7 @@ namespace AirportControlTower.API.Application.Commands
 
         async Task<bool> IsRunwayApproachable()
         {
-            return await dbContext.Airlines.CountAsync(a => a.State == AirlineState.Approach) == 0;
+            return await dbContext.Airlines.CountAsync(a => a.State == AirlineState.Approach) == 0 && !await IsRunwayOccupied();
         }
 
         void StateChanged(object? sender, TransitionChangedEventArgs e)

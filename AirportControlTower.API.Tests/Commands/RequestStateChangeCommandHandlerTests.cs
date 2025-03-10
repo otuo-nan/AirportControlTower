@@ -198,6 +198,59 @@ namespace AirportControlTower.API.Tests.Commands
             Assert.Equal(HistoryStatus.Rejected, historyRecord.Status);
             Assert.Equal(requestingAirline.Id, historyRecord.AirlineId);
         }
+
+        [Theory]
+        [InlineData(AirlineState.TakingOff)]
+        [InlineData(AirlineState.Landed)]
+        public async Task Handle_WhenRunwayOccupied_ShouldNotAllowApproach(AirlineState runwayState)
+        {
+            // Arrange
+            var runwayOccupyingAirline = new Airline
+            {
+                Id = Guid.NewGuid(),
+                Name = "Emirates",
+                CallSign = "RUNWAY1",
+                State = runwayState,
+                Type = AirlineType.Airliner,
+                LastKnownPosition = new Position()
+            };
+
+            var approachingAirline = new Airline
+            {
+                Id = Guid.NewGuid(),
+                Name = "Lufthansa",
+                CallSign = "AIR123",
+                State = AirlineState.Airborne,
+                Type = AirlineType.Airliner,
+                LastKnownPosition = new Position()
+            };
+
+            _dbContext.Airlines.AddRange(runwayOccupyingAirline, approachingAirline);
+            await _dbContext.SaveChangesAsync();
+
+            var command = new RequestStateChangeCommand
+            {
+                CallSign = "AIR123",
+                State = AirlineStateTrigger.Approach
+            };
+
+            var handler = new RequestChangeCommandHandler(_dbContext, _loggerMock.Object, _optionsMock.Object);
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<PlatformException>(() =>
+                handler.Handle(command, CancellationToken.None));
+
+            // Verify state remains unchanged
+            var airlineAfterRequest = await _dbContext.Airlines.FirstAsync(a => a.CallSign == "AIR123");
+            Assert.Equal(AirlineState.Airborne, airlineAfterRequest.State);
+
+            // Verify history record was created
+            var historyRecord = await _dbContext.StateChangeHistory
+                .OrderByDescending(h => h.CreatedOn)
+                .FirstAsync();
+            Assert.Equal(HistoryStatus.Rejected, historyRecord.Status);
+            Assert.Equal(approachingAirline.Id, historyRecord.AirlineId);
+        }
     }
 }
 

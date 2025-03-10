@@ -13,7 +13,7 @@ namespace AirportControlTower.API.Application.FSM
 
         readonly StateMachine<AirlineState, AirlineStateTrigger> _stateMachine;
         public AirlineStateMachine(Airline airline,
-            bool isRunwayAvailable, //is available also if there are parking slots, if can land even when there are no parking slots, its assumed runaway cannot be used, so why land on it in the first place
+            bool isRunwayAvailable,
             bool isRunwayApproachable)
         {
             _stateMachine = new StateMachine<AirlineState, AirlineStateTrigger>(() => airline.State, s => airline.State = s);
@@ -24,8 +24,6 @@ namespace AirportControlTower.API.Application.FSM
             _stateMachine.Configure(AirlineState.TakingOff) //only one on the runway at a time
                 .Permit(AirlineStateTrigger.IsAirborne, AirlineState.Airborne);
 
-            //check if no aircraft is on the approach
-            //assumption: you can land if there isnt any parking space
             _stateMachine.Configure(AirlineState.Airborne)
                 .PermitIf(AirlineStateTrigger.Approach, AirlineState.Approach, () => isRunwayApproachable, runwayApproachabilityGuardDescription);
 
