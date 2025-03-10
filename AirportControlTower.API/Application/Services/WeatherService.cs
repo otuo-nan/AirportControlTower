@@ -10,10 +10,12 @@ using static AirportControlTower.API.Application.Dtos.OpenWeatherDtos;
 namespace AirportControlTower.API.Application.Services
 {
     public class WeatherService(HttpClient httpClient,
-        AppDbContext dbContext,
-        IOptions<OpenWeatherApi> options)
+        AppDbContext dbContext, 
+        IOptions<OpenWeatherApi> openWeatherApiOptions, 
+        IOptions<AirportSpecs> airPortConfigOptions)
     {
-        readonly OpenWeatherApi openWeatherApiConfig = options.Value;
+        readonly AirportSpecs airportSpecs = airPortConfigOptions.Value;
+        readonly OpenWeatherApi openWeatherApiConfig = openWeatherApiOptions.Value;
         public async Task<WeatherData> GetWeatherInformationAsync(string callSign)
         {
             var airline = await GetAirlineAsync(callSign);
@@ -27,7 +29,7 @@ namespace AirportControlTower.API.Application.Services
             }
             else
             {
-                var openWeather = await GetWeatherInformationAsync(airline.LastKnownPosition);
+                var openWeather = await GetWeatherInformationAsync(airportSpecs.Lat, airportSpecs.Lon);
 
                 return await CreateWeatherAsync(airline.Id, openWeather);
             }
@@ -44,7 +46,7 @@ namespace AirportControlTower.API.Application.Services
             foreach (var weather in weatherQueriedByAirlines)
             {
                 var airline = await GetAirlineAsync(weather.AirlineId);
-                var openWeather = await GetWeatherInformationAsync(airline.LastKnownPosition);
+                var openWeather = await GetWeatherInformationAsync(airportSpecs.Lat, airportSpecs.Lon);
 
                 await UpdateWeatherAsync(airline.Id, openWeather);
             }
@@ -67,9 +69,9 @@ namespace AirportControlTower.API.Application.Services
             return await dbContext.Weather.FirstOrDefaultAsync(a => a.AirlineId == airlineId);
         }
 
-        async Task<WeatherInformation> GetWeatherInformationAsync(Position position)
+        async Task<WeatherInformation> GetWeatherInformationAsync(float lat, float lon)
         {
-            var response = await httpClient.GetAsync($"weather?lat={position.Latitude}&lon={position.Longitude}&appid={openWeatherApiConfig.ApiKey}");
+            var response = await httpClient.GetAsync($"weather?lat={lat}&lon={lon}&appid={openWeatherApiConfig.ApiKey}");
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStreamAsync();
             return JsonSerializer.Deserialize<WeatherInformation>(content, Utility.SerializerOptions)!;

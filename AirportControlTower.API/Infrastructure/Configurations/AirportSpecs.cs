@@ -4,6 +4,8 @@
     public class AirportSpecs
     {
         public string Location { get; set; }
+        public float Lat { get; set; }
+        public float Lon { get; set; }
         public int Runways { get; set; }
         public int AirlineParkingSlots { get; set; }
         public int PrivateParkingSlots { get; set; }

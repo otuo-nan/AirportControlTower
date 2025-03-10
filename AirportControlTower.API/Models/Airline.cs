@@ -28,8 +28,8 @@ namespace AirportControlTower.API.Models
 
     public class Position
     {
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
+        public float Latitude { get; set; }
+        public float Longitude { get; set; }
         public float Altitude { get; set; }
         public float Heading { get; set; }
     }
