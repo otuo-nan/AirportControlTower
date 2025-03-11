@@ -1,0 +1,40 @@
+services:
+  sqldata:
+      image: mcr.microsoft.com/mssql/server:2019-latest
+      environment:
+        - SA_PASSWORD=Pass@word
+        - ACCEPT_EULA=Y
+      ports:
+         - "5422:1433"
+      volumes:
+        - act-sqldata:/var/opt/mssql
+
+  act.api:
+    image: ${DOCKER_REGISTRY-}airportcontroltowerapi
+    build:
+      context: AirportControlTower.API
+      dockerfile: Dockerfile
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=sqldata;Database=BelgradeCT.db;User Id=sa;Password=Pass@word;Encrypt=false
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+    ports:
+      - "58364:8080"
+    depends_on:
+     - sqldata
+
+  act.dashboard:
+    image: ${DOCKER_REGISTRY-}airportcontroltowerdashboard
+    build:
+      context: AirportControlTower.Dashboard
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+    ports:
+      - "58374:8080"
+
+volumes:
+ act-sqldata:
+   external: false
+
