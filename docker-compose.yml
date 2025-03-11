@@ -18,6 +18,8 @@ services:
       - ConnectionStrings__DefaultConnection=Server=sqldata;Database=BelgradeCT.db;User Id=sa;Password=Pass@word;Encrypt=false
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
+      - OpenWeatherApi__BaseUrl=${OPENWEATHER_API_BASE_URL}
+      - OpenWeatherApi__ApiKey=${OPENWEATHER_API_KEY}
     ports:
       - "58364:8080"
     depends_on:

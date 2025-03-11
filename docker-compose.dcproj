@@ -10,6 +10,8 @@
     <DockerServiceName>airportcontroltower.api</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
+    <None Include=".env" />
+    <None Include=".env.public" />
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
   </ItemGroup>
