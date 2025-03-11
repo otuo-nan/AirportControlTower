@@ -19,9 +19,11 @@ namespace AirportControlTower.API.Infrastructure.Workers
 
             if (!await dbContext.Airlines.AnyAsync(cancellationToken))
             {
-                await dbContext.Airlines.AddRangeAsync(GetEntitites<Airline[]>("airlines.json"));
+                var users = GetEntitites<List<UserDto>>("users.json");
+                await UserSeeder.LoadUsers(scope.ServiceProvider, users);
 
-                await dbContext.SaveChangesAsync(cancellationToken);
+                await dbContext.Airlines.AddRangeAsync(GetEntitites<Airline[]>("airlines.json"));
+                await dbContext.SaveChangesAsync(cancellationToken);        
             }
         }
 

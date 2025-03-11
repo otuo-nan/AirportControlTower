@@ -1,19 +1,59 @@
-﻿@inherits LayoutComponentBase
+﻿@using AirportControlTower.Dashboard.Utility
+@inherits LayoutComponentBase
+@inject NavigationManager navigationManager
+@inject ILogger<MainLayout> logger
 
-<PageTitle>AirportControlTower.Dashboard</PageTitle>
+<PageTitle>Dashboard</PageTitle>
 
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+    <AuthorizeView>
+        <Authorized>
+            <div class="sidebar">
+                <NavMenu />
+            </div>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
+            <main>
+                <div class="top-row px-4">
+                    <p>
+                        Hello
+                        <span class="text-primary"> @user</span>
+                        <a href="Identity/Account/Logout">Log out</a>
+                    </p>
+                </div>
 
-        <article class="content px-4">
+                <article class="content px-4">
+                    @Body
+                </article>
+            </main>
+        </Authorized>
+        <NotAuthorized>
+            @*Just render the body so that RedirectToLogin works*@
             @Body
-        </article>
-    </main>
+        </NotAuthorized>
+    </AuthorizeView>
 </div>
+
+
+
+@code {
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationState { get; set; } = default!;
+
+    string user = string.Empty;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        @if (firstRender)
+        {
+            try
+            {
+                user = await AuthenticationState.GetEmail();
+                StateHasChanged();
+            }
+            catch (Exception)
+            {
+                logger.LogInformation("User not logged in");
+            }
+        }
+    }
+}

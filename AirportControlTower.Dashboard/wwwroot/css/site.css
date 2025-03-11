@@ -66,3 +66,12 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* overflow: scroll; */
+    white-space: nowrap;
+    line-height: 60px;
+}

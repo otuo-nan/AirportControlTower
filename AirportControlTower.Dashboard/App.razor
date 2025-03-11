@@ -1,4 +1,4 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
+﻿@* <Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
@@ -9,4 +9,40 @@
             <p role="alert">Sorry, there's nothing at this address.</p>
         </LayoutView>
     </NotFound>
-</Router>
+</Router> *@
+
+
+@using Microsoft.AspNetCore.Routing
+@inject NavigationManager NavigationManager
+@inject ILogger<App> logger;
+
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(App).Assembly">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    @{
+                        try
+                        {
+                            var returnUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+                            returnUrl = "~/" + returnUrl;
+                            NavigationManager?.NavigateTo($"Identity/Account/Login?returnUrl={returnUrl}", forceLoad: true);
+                        }
+                        catch (Exception)
+                        {
+                            //logger.LogError(ex.Message);
+                        }
+                    }
+                </NotAuthorized>
+            </AuthorizeRouteView>
+
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        </Found>
+        <NotFound>
+            <PageTitle>Not found</PageTitle>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p role="alert">Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>

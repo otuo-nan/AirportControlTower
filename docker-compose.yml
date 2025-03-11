@@ -35,6 +35,8 @@ services:
       - ASPNETCORE_HTTP_PORTS=8080
     ports:
       - "58374:8080"
+    depends_on:
+     - sqldata
 
 volumes:
  act-sqldata:
