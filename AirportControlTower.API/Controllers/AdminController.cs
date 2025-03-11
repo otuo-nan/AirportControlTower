@@ -14,7 +14,7 @@ namespace AirportControlTower.API.Controllers
     public class AdminController : ControllerBase
     {
         [HttpGet("airline-contacts")]
-        public async Task<IActionResult> AirlineControlTowerContact(
+        public async Task<IActionResult> AirlinesThatHaveMadeContactToControlTower(
             [FromQuery] PageRequest request, [FromServices] AirlineQueries queries)
         {
             var options = new PagingOptions(request);
@@ -49,6 +49,13 @@ namespace AirportControlTower.API.Controllers
             });
         }
 
+        [HttpGet("dashboard")]
+        public async Task<IActionResult> GetDashboardData([FromServices] DashboardQueries queries)
+        {
+            return Ok(await queries.GetDashboardDataAsync());
+        }
+
+
         [HttpGet("last-n-airline-state-change-reqest-history")]
         public async Task<IActionResult> Last_N_AirlineStateChangeHistory([FromServices] StateChangeHistoryQueries queries, int n = 10)
         {
@@ -66,11 +73,6 @@ namespace AirportControlTower.API.Controllers
         {
             return Ok(await queries.GetParkingLotViewAsync());
         }
-        
-        [HttpGet("dashboard")]
-        public async Task<IActionResult> GetDashboardData([FromServices] DashboardQueries queries)
-        {
-            return Ok(await queries.GetDashboardDataAsync());
-        }
+       
     }
 }

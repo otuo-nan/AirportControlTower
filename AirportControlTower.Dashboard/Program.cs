@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using AirportControlTower.Dashboard.Database;
 using Microsoft.AspNetCore.Identity;
+using AirportControlTower.Dashboard.Services;
 
 namespace AirportControlTower.Dashboard;
 
@@ -30,6 +31,12 @@ public class Program
             options.User.RequireUniqueEmail = true;
         })
         .AddEntityFrameworkStores<AppDbContext>();
+
+        builder.Services.AddHttpClient<DashboardService>(client =>
+        {
+            client.BaseAddress = new Uri(builder.Configuration["AirportControlTowerAPI:BaseUrl"]!);
+            client.DefaultRequestHeaders.Add("X-API-KEY", builder.Configuration["AirportControlTowerAPI:ApiKey"]);
+        });
 
         var app = builder.Build();
 
