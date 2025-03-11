@@ -3,7 +3,6 @@ using AirportControlTower.API.Infrastructure.Authentication;
 using AirportControlTower.API.Infrastructure.Database;
 using AirportControlTower.API.Models;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
