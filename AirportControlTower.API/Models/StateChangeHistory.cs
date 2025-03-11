@@ -10,6 +10,8 @@ namespace AirportControlTower.API.Models
     public class StateChangeHistory
     {
         public Guid Id { get; set; }
+        public AirlineState FromState { get; set; }
+        public AirlineStateTrigger Trigger { get; set; }
 
         [ForeignKey(nameof(Airline))]
         public Guid AirlineId { get; set; }

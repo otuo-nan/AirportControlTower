@@ -1,3 +1,4 @@
+using AirportControlTower.API.Application.Queries;
 using AirportControlTower.API.Application.Services;
 using AirportControlTower.API.Infrastructure;
 using AirportControlTower.API.Infrastructure.Authentication;
@@ -56,6 +57,11 @@ namespace AirportControlTower.API
                 options.Password.RequireUppercase = false;
                 options.User.RequireUniqueEmail = true;
             });
+
+            builder.Services.AddScoped<DashboardQueries>();
+            builder.Services.AddScoped<AirlineQueries>();
+            builder.Services.AddScoped<WeatherQueries>();
+            builder.Services.AddScoped<StateChangeHistoryQueries>();
 
             builder.Services.AddHttpClient<WeatherService>(options =>
             {

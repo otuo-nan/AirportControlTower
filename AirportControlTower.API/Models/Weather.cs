@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace AirportControlTower.API.Models
 {
+    //reference made to airline to record airline that made request
     public class Weather
     {
         public Guid Id { get; set; }

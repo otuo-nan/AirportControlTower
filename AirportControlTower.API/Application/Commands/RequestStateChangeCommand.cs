@@ -34,11 +34,18 @@ namespace AirportControlTower.API.Application.Commands
 
             sm.Fire(command.State);
 
+            void StateChanged(object? sender, TransitionChangedEventArgs e)
+            {
+                dbContext.StateChangeHistory.Add(CreateHistory(e.PreviouState, command.State, HistoryStatus.Accepted));
+                dbContext.SaveChanges();
+                logger.LogInformation("Changed state of airline {callSign} from state: {state1} with trigger: {trigger}", airline.CallSign, e.PreviouState, e.CurrentState);
+            }
+
             void StateChangedFailed(object? sender, TransitionChangedFailedEventArgs e)
             {
-                dbContext.StateChangeHistory.Add(CreateHistory(HistoryStatus.Rejected));
+                dbContext.StateChangeHistory.Add(CreateHistory(airline.State, command.State, HistoryStatus.Rejected));
                 dbContext.SaveChanges();
-                logger.LogError("Failed to change state of airline {callSign} from {state1} to {state2}", airline.CallSign, airline.State, command.State);
+                logger.LogError("Failed to change state of airline {callSign} from {state1} to {state2}", airline.CallSign, airline.State, e.State);
                 throw new PlatformException { CustomStatusCode = (int)HttpStatusCode.Conflict };
             }
         }
@@ -70,18 +77,13 @@ namespace AirportControlTower.API.Application.Commands
             return await dbContext.Airlines.CountAsync(a => a.State == AirlineState.Approach) == 0 && !await IsRunwayOccupied();
         }
 
-        void StateChanged(object? sender, TransitionChangedEventArgs e)
-        {
-            dbContext.StateChangeHistory.Add(CreateHistory(HistoryStatus.Accepted));
-            dbContext.SaveChanges();
-            logger.LogInformation("Changed state of airline {callSign} from {state1} to {state2}", airline.CallSign, e.PreviouState, e.CurrentState);
-        }
-
-        StateChangeHistory CreateHistory(HistoryStatus status)
+        StateChangeHistory CreateHistory(AirlineState fromState, AirlineStateTrigger trigger, HistoryStatus status)
         {
             return new StateChangeHistory
             {
                 AirlineId = airline.Id,
+                FromState = fromState,
+                Trigger = trigger,
                 Status = status
             };
         }

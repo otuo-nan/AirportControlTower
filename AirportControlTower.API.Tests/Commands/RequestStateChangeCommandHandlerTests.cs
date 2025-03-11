@@ -248,6 +248,8 @@ namespace AirportControlTower.API.Tests.Commands
             var historyRecord = await _dbContext.StateChangeHistory
                 .OrderByDescending(h => h.CreatedOn)
                 .FirstAsync();
+            Assert.Equal(AirlineState.Airborne, historyRecord.FromState);
+            Assert.Equal(AirlineStateTrigger.Approach, historyRecord.Trigger);
             Assert.Equal(HistoryStatus.Rejected, historyRecord.Status);
             Assert.Equal(approachingAirline.Id, historyRecord.AirlineId);
         }

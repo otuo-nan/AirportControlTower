@@ -34,7 +34,11 @@ namespace AirportControlTower.API.Application.FSM
 
             _stateMachine.Configure(AirlineState.Approach)
                 .PermitIf(AirlineStateTrigger.Land, AirlineState.Landed, () => isRunwayAvailable, runwayAvailabilityGuardDescription)
-                .Permit(AirlineStateTrigger.Abort, AirlineState.Airborne);
+                .Permit(AirlineStateTrigger.Abort, AirlineState.Airborne)
+                                .OnExit(() =>
+                                {
+                                    Console.WriteLine("Test exit");
+                                });
 
             _stateMachine.Configure(AirlineState.Landed) //only one on the runway at a time
                 .Permit(AirlineStateTrigger.Park, AirlineState.Parked);

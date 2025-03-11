@@ -10,13 +10,48 @@ using static AirportControlTower.API.Application.Dtos.OpenWeatherDtos;
 namespace AirportControlTower.API.Application.Services
 {
     public class WeatherService(HttpClient httpClient,
-        AppDbContext dbContext, 
-        IOptions<OpenWeatherApi> openWeatherApiOptions, 
+        AppDbContext dbContext,
+        IOptions<OpenWeatherApi> openWeatherApiOptions,
         IOptions<AirportSpecs> airPortConfigOptions)
     {
         readonly AirportSpecs airportSpecs = airPortConfigOptions.Value;
         readonly OpenWeatherApi openWeatherApiConfig = openWeatherApiOptions.Value;
+
         public async Task<WeatherData> GetWeatherInformationAsync(string callSign)
+        {
+            var airline = await GetAirlineAsync(callSign);
+
+            //find local first, if doesnt exist, call the api
+            var weather = await GetWeatherAsync();
+
+            if (weather != null)
+            {
+                return weather.Data;
+            }
+            else
+            {
+                var openWeather = await GetWeatherInformationAsync(airportSpecs.Lat, airportSpecs.Lon);
+
+                return await CreateWeatherAsync(airline.Id, openWeather);
+            }
+        }
+
+        /// <summary>
+        /// Used by background service
+        /// </summary>
+        /// <returns></returns>
+        public async Task UpdateLocalWeatherStoreAsync()
+        {
+            var weather = await dbContext.Weather.SingleAsync();
+            var openWeather = await GetWeatherInformationAsync(airportSpecs.Lat, airportSpecs.Lon);
+
+            await UpdateWeatherAsync(weather.Id, openWeather);
+        }
+
+
+        #region
+        //ToDo: should be just one record?
+        public async Task<WeatherData> GetWeatherInformationAsyncv1(string callSign)
         {
             var airline = await GetAirlineAsync(callSign);
 
@@ -39,7 +74,8 @@ namespace AirportControlTower.API.Application.Services
         /// Used by background service
         /// </summary>
         /// <returns></returns>
-        public async Task UpdateLocalWeatherStoreAsync()
+        //ToDo: should be just one record?
+        public async Task UpdateLocalWeatherStoreAsyncv1()
         {
             var weatherQueriedByAirlines = await dbContext.Weather.ToListAsync();
 
@@ -51,7 +87,7 @@ namespace AirportControlTower.API.Application.Services
                 await UpdateWeatherAsync(airline.Id, openWeather);
             }
         }
-
+        #endregion
 
         #region helpers
         async Task<Airline> GetAirlineAsync(string callSign)
@@ -62,6 +98,11 @@ namespace AirportControlTower.API.Application.Services
         async Task<Airline> GetAirlineAsync(Guid id)
         {
             return await dbContext.Airlines.FirstAsync(a => a.Id == id);
+        }
+
+        async Task<Weather?> GetWeatherAsync()
+        {
+            return await dbContext.Weather.SingleOrDefaultAsync();
         }
 
         async Task<Weather?> GetAirlineWeatherAsync(Guid airlineId)
