@@ -2,9 +2,7 @@
 using AirportControlTower.API.Application.Queries;
 using AirportControlTower.API.Application.Requests;
 using AirportControlTower.API.Infrastructure.Authentication;
-using AirportControlTower.API.Infrastructure.Database;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace AirportControlTower.API.Controllers
 {

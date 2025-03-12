@@ -1,0 +1,48 @@
+﻿@using AirportControlTower.Dashboard.Dtos
+
+
+<div class="dashboard-card parking-card">
+    <div class="card-header">
+        <h2>🅿️ Parking Status</h2>
+    </div>
+    <div class="card-content">
+        @foreach (var parkingLot in ParkingLotView)
+        {
+            var maxSlots = parkingLot.AirlineType == AirlineType.Airliner ? 5 : 10;
+            var occupiedSlots = parkingLot.Airlines.Count();
+
+            <div class="parking-section">
+                <h3>@(parkingLot.AirlineType == AirlineType.Airliner ? "✈️" : "🛩️") @parkingLot.AirlineType Parking</h3>
+                <div class="parking-grid">
+                    @for (int i = 0; i < maxSlots; i++)
+                    {
+                        var aircraft = parkingLot.Airlines.ElementAtOrDefault(i);
+                        <div class="parking-slot @(aircraft != null ? "occupied" : "empty")"
+                             title="@(aircraft?.Name ?? "Empty Slot")">
+                            @if (aircraft != null)
+                            {
+                                <div class="aircraft-info">
+                                    @(parkingLot.AirlineType == AirlineType.Airliner ? "✈️" : "🛩️")
+                                    <small>@aircraft.CallSign</small>
+                                </div>
+                            }
+                            else
+                            {
+                                <span class="empty-label">Empty</span>
+                            }
+                        </div>
+                    }
+                </div>
+                <div class="parking-summary">
+                    <span class="occupied-count">Occupied: @occupiedSlots</span>
+                    <span class="available-count">Available: @(maxSlots - occupiedSlots)</span>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public IEnumerable<ParkingLotViewDto> ParkingLotView { get; set; } = default!;
+}

@@ -1,5 +1,35 @@
-﻿<h3>Dashboard</h3>
+﻿@page "/"
+@using AirportControlTower.Dashboard.Components.Dashboard
+@using AirportControlTower.Dashboard.Dtos
 
-@code {
+@if (Model == null)
+{
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+}
+else
+{
+    <div class="dashboard-container">
+        <div class="info-banner">
+            <div class="airport-info">
+                <h1>@Model.AirportInformation.Location Airport </h1>
+                <div class="meta-info">
+                    <span>📍 @FormatCoordinates(Model.AirportInformation.Lat, @Model.AirportInformation.Lon)</span>
+                    <span>🕒 @DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") UTC</span>
+                </div>
+            </div>
+        </div>
 
+        <div class="dashboard-grid">
+            <!-- Weather Card -->
+            <Weather LastFetchedWeatherData="Model.LastFetchedWeatherData"/>
+
+            <!-- Parking Status Card -->
+            <ParkingOverview ParkingLotView="Model.ParkingLotView"/>
+
+            <!-- State Changes Card -->
+            <History Last10AirlineStateChangeHistory="Model.Last10AirlineStateChangeHistory"/>
+        </div>
+    </div>
 }

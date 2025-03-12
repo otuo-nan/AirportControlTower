@@ -1,0 +1,52 @@
+﻿@using AirportControlTower.Dashboard.Dtos
+
+
+<div class="dashboard-card history-card">
+    <div class="card-header">
+        <h2>🔄 Recent State Changes</h2>
+    </div>
+    <div class="card-content">
+        <div class="state-changes-list">
+            @foreach (var change in Last10AirlineStateChangeHistory)
+            {
+                <div class="state-change-item @(change.Status == HistoryStatus.Rejected ? "rejected" : "accepted")">
+
+                    <div class="change-info">
+                        <div class="change-time">
+                            @change.CreatedOn.ToString("HH:mm:ss")
+                        </div>
+                        <div class="aircraft-info">
+                            <span class="aircraft-type">
+                                @(change.AirlineType == AirlineType.Airliner ? "✈️" : "🛩️")
+                            </span>
+                            <span class="aircraft-name">@change.AirlineName</span>
+                            <span class="callsign">(@change.AirlineCallSign)</span>
+                        </div>
+                    </div>
+                    <div class="change-info">
+                        <div class="state-transition">
+                            <span class="state @change.FromState.ToString().ToLower()">@change.FromState</span>
+                            <span class="transition-arrow">➜</span>
+                            <span class="trigger">@change.Trigger</span>
+                        </div>
+                        <div class="status">
+                            @if (change.Status == HistoryStatus.Accepted)
+                            {
+                                <span class="status-badge accepted">✅ Accepted</span>
+                            }
+                            else
+                            {
+                                <span class="status-badge rejected">❌ Rejected</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public IEnumerable<StateChangeHistoryDto> Last10AirlineStateChangeHistory { get; set; } = default!;
+}

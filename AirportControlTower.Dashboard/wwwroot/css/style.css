@@ -113,6 +113,25 @@ label.col-form-label, .form-check-label {
         color: black;
     }
 
+
+/* Dashboard Cards */
+.dashboard-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.card-header {
+    padding: 20px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.card-content {
+    padding: 20px;
+}
+
 /*Small devices (landscape phones, 576px and up)
 */
 @media (min-width: 576px) {

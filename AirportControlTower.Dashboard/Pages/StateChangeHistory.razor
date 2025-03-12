@@ -41,8 +41,11 @@
                             <th @onclick="@(() =>Sort(nameof(StateChangeHistoryDto.Trigger)))">
                                 Trigger <fa-icon class="@SortIndicator(nameof(StateChangeHistoryDto.Trigger))"></fa-icon>
                             </th>
+                            <th @onclick="@(() =>Sort(nameof(StateChangeHistoryDto.AirlineType)))">
+                                Type <fa-icon class="@SortIndicator(nameof(StateChangeHistoryDto.AirlineType))"></fa-icon>
+                            </th>
                             <th @onclick="@(() =>Sort(nameof(StateChangeHistoryDto.Status)))">
-                                Type <fa-icon class="@SortIndicator(nameof(StateChangeHistoryDto.Status))"></fa-icon>
+                                Status <fa-icon class="@SortIndicator(nameof(StateChangeHistoryDto.Status))"></fa-icon>
                             </th>
                             <th @onclick="@(() =>Sort(nameof(StateChangeHistoryDto.CreatedOn)))">
                                 Last update <fa-icon class="@SortIndicator(nameof(StateChangeHistoryDto.CreatedOn))"></fa-icon>
@@ -72,6 +75,7 @@
                                     <td>@item.AirlineCallSign</td>
                                     <td>@item.FromState</td>
                                     <td>@item.Trigger</td>
+                                    <td>@item.AirlineType</td>
                                     <td class="@GetHistoryStatusCss(item.Status)">@item.Status</td>
                                     <td>@item.CreatedOn.ToString("MMMM dd, yyyy hh:mm tt")</td>
                                 </tr>

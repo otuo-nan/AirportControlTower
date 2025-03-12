@@ -1,0 +1,32 @@
+﻿.parking-section {
+    margin-bottom: 20px;
+}
+
+.parking-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.parking-slot {
+    background: #f8f9fa;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    min-height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+    .parking-slot.occupied {
+        border-color: #28a745;
+        background: #e6f4ea;
+    }
+
+    .parking-slot.empty {
+        border-style: dashed;
+    }

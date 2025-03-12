@@ -15,6 +15,7 @@ namespace AirportControlTower.Dashboard.Dtos
         public Guid AirlineId { get; set; }
         public required string AirlineName { get; set; }
         public required string AirlineCallSign { get; set; }
+        public required AirlineType  AirlineType{ get; set; }
         public HistoryStatus Status { get; set; }
         public DateTime CreatedOn { get; set; } 
     }

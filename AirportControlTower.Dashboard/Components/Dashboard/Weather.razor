@@ -1,0 +1,67 @@
+﻿@using AirportControlTower.Dashboard.Dtos
+
+<div class="weather-container">
+    <div class="weather-card">
+        <div class="weather-header">
+            <h2>Current Weather @GetWeatherEmoji(LastFetchedWeatherData.Description)</h2>
+        </div>
+
+        <div class="weather-content">
+            <div class="weather-main">
+                <div class="temperature">
+                    <span class="temp-value">@LastFetchedWeatherData.Temperature°C</span>
+                    <span class="temp-icon">🌡️</span>
+                </div>
+
+                <div class="description">
+                    @LastFetchedWeatherData.Description
+                </div>
+            </div>
+
+            <div class="weather-details">
+                <div class="detail-item">
+                    <span class="detail-label">💨 Wind Speed:</span>
+                    <span class="detail-value">@LastFetchedWeatherData.Wind.Speed m/s</span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">🧭 Wind Direction:</span>
+                    <span class="detail-value">@GetWindDirection(LastFetchedWeatherData.Wind.Deg)°</span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">👁️ Visibility:</span>
+                    <span class="detail-value">@(LastFetchedWeatherData.Visibility / 1000) km</span>
+                </div>
+            </div>
+
+            <div class="last-update">
+                <small>🕒 Last Updated: @LastFetchedWeatherData.LastUpdate.ToString("MMM dd, yyyy HH:mm")</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public WeatherData LastFetchedWeatherData { get; set; } = default!;
+
+    static string GetWeatherEmoji(string description) => description?.ToLower() switch
+    {
+        var d when d?.Contains("clear") == true => "☀️",
+        var d when d?.Contains("cloud") == true => "☁️",
+        var d when d?.Contains("rain") == true => "🌧️",
+        var d when d?.Contains("snow") == true => "❄️",
+        var d when d?.Contains("thunder") == true => "⛈️",
+        var d when d?.Contains("mist") == true || d?.Contains("fog") == true => "🌫️",
+        _ => "🌤️"
+    };
+
+    static string GetWindDirection(int degrees)
+    {
+        var directions = new[] { "N", "NE", "E", "SE", "S", "SW", "W", "NW" };
+        var index = ((degrees + 22) % 360) / 45;
+        return directions[index];
+    }
+}
