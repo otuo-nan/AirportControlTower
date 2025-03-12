@@ -31,8 +31,11 @@ services:
       context: AirportControlTower.Dashboard
       dockerfile: Dockerfile
     environment:
+      - ConnectionStrings__DefaultConnection=Server=sqldata;Database=BelgradeCT.db;User Id=sa;Password=Pass@word;Encrypt=false
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
+      - AirportControlTowerAPI__BaseUrl=${AIRPORT_CONTROL_TOWER_API_BASE_URL}
+      - AirportControlTowerAPI__ApiKey=${AIRPORT_CONTROL_TOWER_API_API_KEY}
     ports:
       - "58374:8080"
     depends_on:
