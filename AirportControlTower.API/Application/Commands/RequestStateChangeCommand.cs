@@ -38,14 +38,14 @@ namespace AirportControlTower.API.Application.Commands
             {
                 dbContext.StateChangeHistory.Add(CreateHistory(e.PreviouState, command.State, HistoryStatus.Accepted));
                 dbContext.SaveChanges();
-                logger.LogInformation("Changed state of airline {callSign} from state: {state1} with trigger: {trigger}", airline.CallSign, e.PreviouState, e.CurrentState);
+                logger.LogInformation("Changed state of airline {callSign} from state: {state} with trigger: {trigger}", airline.CallSign, e.PreviouState, command.State);
             }
 
             void StateChangedFailed(object? sender, TransitionChangedFailedEventArgs e)
             {
                 dbContext.StateChangeHistory.Add(CreateHistory(airline.State, command.State, HistoryStatus.Rejected));
                 dbContext.SaveChanges();
-                logger.LogError("Failed to change state of airline {callSign} from {state1} to {state2}", airline.CallSign, airline.State, e.State);
+                logger.LogError("Failed to change state of airline {callSign} from state: {state} with trigger: {trigger}", airline.CallSign, airline.State, command.State);
                 throw new PlatformException { CustomStatusCode = (int)HttpStatusCode.Conflict };
             }
         }

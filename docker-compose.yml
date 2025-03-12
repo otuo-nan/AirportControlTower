@@ -24,7 +24,7 @@ services:
     ports:
       - "58364:8080"
     depends_on:
-     - sqldata
+      - sqldata
 
   act.dashboard:
     image: ${DOCKER_REGISTRY-}airportcontroltowerdashboard
@@ -40,7 +40,7 @@ services:
     ports:
       - "58374:8080"
     depends_on:
-     - sqldata
+      - sqldata
 
 volumes:
  act-sqldata:
