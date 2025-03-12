@@ -1,5 +1,110 @@
-﻿<h3>StateChangeHistory</h3>
+﻿@page "/history"
 
-@code {
+@using AirportControlTower.Dashboard.Components.Shared
+@using AirportControlTower.Dashboard.Dtos
+<PageTitle>History</PageTitle>
 
-}
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex justify-content-between mb-2">
+            <div>
+                <h3>History</h3>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group mb-3">
+                <input autocomplete="off" name="Search" type="text"
+                       class="form-control f-sz-1-em" placeholder="Search..." aria-describedby="basic-addon2"
+                       @bind="@SearchQuery" @bind:event="oninput">
+            </div>
+        </div>
+        <div>
+            <div class="list-table">
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr class="list-heading">
+                            <AuthorizeView Roles="Developer">
+                                <th @onclick="@(() => Sort(nameof(StateChangeHistoryDto.Id)))">
+                                    Id <fa-icon class="@SortIndicator(nameof(StateChangeHistoryDto.Id))"></fa-icon>
+                                </th>
+                            </AuthorizeView>
+                            <th @onclick="@(() =>Sort(nameof(StateChangeHistoryDto.AirlineName)))">
+                                Name <fa-icon class="@SortIndicator(nameof(StateChangeHistoryDto.AirlineName))"></fa-icon>
+                            </th>
+                            <th @onclick="@(() =>Sort(nameof(StateChangeHistoryDto.AirlineCallSign)))">
+                                CallSign  <fa-icon class="@SortIndicator(nameof(StateChangeHistoryDto.AirlineCallSign))"></fa-icon>
+                            </th>
+                            <th @onclick="@(() =>Sort(nameof(StateChangeHistoryDto.FromState)))">
+                                State  <fa-icon class="@SortIndicator(nameof(StateChangeHistoryDto.FromState))"></fa-icon>
+                            </th>
+                            <th @onclick="@(() =>Sort(nameof(StateChangeHistoryDto.Trigger)))">
+                                CallSign <fa-icon class="@SortIndicator(nameof(StateChangeHistoryDto.Trigger))"></fa-icon>
+                            </th>
+                            <th @onclick="@(() =>Sort(nameof(StateChangeHistoryDto.Status)))">
+                                Type <fa-icon class="@SortIndicator(nameof(StateChangeHistoryDto.Status))"></fa-icon>
+                            </th>
+                            <th @onclick="@(() =>Sort(nameof(StateChangeHistoryDto.CreatedOn)))">
+                                Last update <fa-icon class="@SortIndicator(nameof(StateChangeHistoryDto.CreatedOn))"></fa-icon>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (listEntities == null && _isProcessing)
+                        {
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        }
+                        else if (listEntities == null && !_isProcessing)
+                        {
+                            <h4>No data available</h4>
+                        }
+                        else
+                        {
+                            @foreach (var item in listEntities!)
+                            {
+                                <tr class="list_row" @ondblclick="async () => await ListRow_DbClicked(item)">
+                                    <AuthorizeView Roles="Developer">
+                                        <td>@item.Id</td>
+                                    </AuthorizeView>
+                                    <td>@item.AirlineName</td>
+                                    <td>@item.AirlineCallSign</td>
+                                    <td>@item.FromState</td>
+                                    <td>@item.Trigger</td>
+                                    <td class="@GetHistoryStatusCss(item.Status)">@item.Status</td>
+                                    <td>@item.CreatedOn.ToString("MMMM dd, yyyy hh:mm tt")</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between">
+            <div>
+                <span>Count: @pageMetaData.TotalCount</span>
+            </div>
+            <Pagination Spread=3 MetaData="pageMetaData" SelectedPage="SelectedPage_Callback"></Pagination>
+        </div>
+
+    </div>
+</div>
+
+@*modal*@
+<div class="modal fade" tabindex="-1" role="dialog" id="details-modal" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <b>Details</b>
+                </h5>
+
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>

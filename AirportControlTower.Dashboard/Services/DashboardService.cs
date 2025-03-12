@@ -1,16 +1,20 @@
 ﻿using AirportControlTower.Dashboard.Data;
 using AirportControlTower.Dashboard.Dtos;
+using System.Threading;
 
 namespace AirportControlTower.Dashboard.Services
 {
     public class DashboardService(HttpClient httpClient, ILogger<DashboardService> logger)
     {
-        public async Task<PaginatedEntities<ListAirlineDto>?> AirlinesThatHaveMadeContactToControlTowerAsync(PagingOptionsDto options)
+        public async Task<PaginatedEntities<ListAirlineDto>?> AirlinesThatHaveMadeContactToControlTowerAsync(
+            PagingOptionsDto options,
+            CancellationToken cancellationToken = default)
         {
             try
             {
-                var httpParams = $"admin/airline-contacts?page={options.Page}&pageSize={options.PageSize}&sortfield={options.CurrentSortField}&sortDirection={options.CurrentSortDirection}";
-                return await httpClient.GetFromJsonAsync<PaginatedEntities<ListAirlineDto>>(httpParams);
+                var httpParams = $"admin/airline-contacts?page={options.Page}&pageSize={options.PageSize}&searchQuery={options.SearchQuery}" +
+                    $"&sortfield={options.CurrentSortField}&sortDirection={options.CurrentSortDirection}";
+                return await httpClient.GetFromJsonAsync<PaginatedEntities<ListAirlineDto>>(httpParams, cancellationToken);
             }
             catch (Exception ex)
             {
@@ -19,12 +23,15 @@ namespace AirportControlTower.Dashboard.Services
             }
         } 
         
-        public async Task<PaginatedEntities<StateChangeHistoryDto>?> AirlineStateChangeHistoryAsync(PagingOptionsDto options)
+        public async Task<PaginatedEntities<StateChangeHistoryDto>?> AirlineStateChangeHistoryAsync(
+            PagingOptionsDto options, 
+            CancellationToken cancellationToken = default)
         {
             try
             {
-                var httpParams = $"admin/airline-state-change-reqest-history?page={options.Page}&pageSize={options.PageSize}&sortfield={options.CurrentSortField}&sortDirection={options.CurrentSortDirection}";
-                return await httpClient.GetFromJsonAsync<PaginatedEntities<StateChangeHistoryDto>>(httpParams);
+                var httpParams = $"admin/airline-state-change-reqest-history?page={options.Page}&pageSize={options.PageSize}&searchQuery={options.SearchQuery}" +
+                    $"&sortfield={options.CurrentSortField}&sortDirection={options.CurrentSortDirection}";
+                return await httpClient.GetFromJsonAsync<PaginatedEntities<StateChangeHistoryDto>>(httpParams, cancellationToken);
             }
             catch (Exception ex)
             {

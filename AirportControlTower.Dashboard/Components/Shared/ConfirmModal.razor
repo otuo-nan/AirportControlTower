@@ -1,0 +1,42 @@
+﻿<div class="modal" tabindex="-1" role="dialog" id="@ModalId">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="card-body p-10">
+                    @Message
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" @onclick="ConfirmAction">Confirm</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Message { get; set; } = "Are you sure you want to continue?";
+
+    [Parameter]
+    public string ModalId { get; set; } = "confirm-modal";
+
+    [Parameter]
+    public EventCallback DoConfirmActionCallBack { get; set; }
+
+    protected async Task ConfirmAction()
+    {
+        await DoConfirmActionCallBack.InvokeAsync(null);
+    } 
+
+    //  [Parameter]
+    // public required string EntityId { get; set; }
+
+    // [Parameter]
+    // public EventCallback<string> DoConfirmActionCallBack { get; set; }
+
+    // protected async Task ConfirmAction()
+    // {
+    //     await DoConfirmActionCallBack.InvokeAsync(EntityId);
+    // }
+}

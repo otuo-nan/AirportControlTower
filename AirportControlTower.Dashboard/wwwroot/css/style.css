@@ -1,0 +1,143 @@
+﻿@font-face {
+    font-family: Poppins;
+    src: url('fonts/Poppins-Regular.woff') format('woff');
+}
+
+*::-webkit-scrollbar-track {
+    background-color: #F5F5F5;
+}
+
+*::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
+    background-color: #F5F5F5;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: lightgray;
+    border-radius: calc(15px / 2);
+}
+
+.required:after {
+    content: " *";
+    color: red;
+}
+
+body {
+    background-image: url(/images/gm-desktop.png);
+    font-family: "Poppins";
+}
+
+p {
+    margin: 0;
+}
+
+.bi {
+    font-size: 20px;
+}
+
+.bi-trash3 {
+    color: red;
+}
+
+.trash3-disabled {
+    color: grey;
+}
+
+.row_action:hover {
+    background-color: white;
+}
+
+.row_action > a {
+    margin-right: 8px;
+}
+
+thead {
+    position: sticky;
+    top: 0;
+    background-color: #ededed;
+}
+
+div.list-table {
+    width: 100%;
+    max-height: 760px;
+    height: 685px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    /* border-radius: 5px;
+    border: 1px solid grey;*/
+}
+
+.a-tag-underline {
+    text-decoration: underline !important;
+    cursor: pointer;
+}
+
+label.col-form-label, .form-check-label {
+    font-size: large
+}
+
+.list_row, .fa-sort-down, .fa-sort-up {
+    cursor: pointer;
+}
+
+    .list_row:hover {
+        background-color: #ededed;
+    }
+
+.date_input {
+    padding-left: 5px;
+    height: 39px;
+    border-radius: 5px;
+    border-color: #ced4da;
+    font-size: 18px;
+}
+
+.nav-item:hover {
+    cursor: pointer;
+}
+
+.nav-tabs {
+    border-radius: 1px !important;
+}
+
+.my_nav_item a {
+    background-color: #dbd7d775 !important;
+    color: black;
+    height: 35px;
+    padding-top: 5px
+}
+
+    .my_nav_item a.active {
+        background-color: white !important;
+        color: black;
+    }
+
+/*Small devices (landscape phones, 576px and up)
+*/
+@media (min-width: 576px) {
+}
+
+/*Medium devices (tablets, 768px and up)
+*/
+@media (min-width: 768px) {
+}
+
+/*Large devices (desktops, 992px and up)
+*/
+@media (min-width: 992px) {
+}
+
+/*X-Large devices (large desktops, 1200px and up)
+*/
+@media (min-width: 1200px) {
+}
+
+/*XX-Large devices (larger desktops, 1400px and up)
+*/
+@media (min-width: 1400px) {
+    .table {
+        /*        width: 120%;
+*/
+    }
+}

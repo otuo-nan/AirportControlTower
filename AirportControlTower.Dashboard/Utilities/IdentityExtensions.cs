@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
 
-namespace AirportControlTower.Dashboard.Utility
+namespace AirportControlTower.Dashboard.Utilities
 {
     public static class IdentityExtensions
     {

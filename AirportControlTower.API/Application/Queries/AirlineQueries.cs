@@ -24,8 +24,7 @@ namespace AirportControlTower.API.Application.Queries
 
             if (!string.IsNullOrEmpty(searchQuery))
             {
-                entities = entities.Where(p => p.Name.Contains(searchQuery) || p.State.ToString().Contains(searchQuery)
-                                || p.CallSign.Contains(searchQuery) || p.CallSign.Contains(searchQuery));
+                entities = entities.Where(p => p.Name.Contains(searchQuery) || p.CallSign.Contains(searchQuery));
             }
 
             var count = await entities.CountAsync();

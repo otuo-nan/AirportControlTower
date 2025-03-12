@@ -1,0 +1,18 @@
+﻿
+<div class="search @TopDivClassName">
+    <div class="input-group">
+        <input autocomplete="off" id="search_input" name="Search" type="text"
+               class="form-control f-sz-1-em" placeholder="Search..." aria-describedby="basic-addon2"
+        @bind="@SearchQuery" @bind:event="oninput">
+    </div>
+    <div class="@SearchResultsCss()">
+        @foreach (var item in listEntities)
+        {
+            (string meta1, string meta2) = GetMetadata(item);
+            <div class="search_result" @onclick="() => ItemSelected(item)">
+                <p>@meta1</p>
+                <p><small>@meta2</small></p>
+            </div>
+        }
+    </div>
+</div>

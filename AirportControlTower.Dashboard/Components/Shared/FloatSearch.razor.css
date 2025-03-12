@@ -1,0 +1,39 @@
+﻿/*made this relative because search_results(absolute)
+    works based on the nearest ancestor
+*/
+.search{
+    position: relative;
+    width: 100%
+}
+
+.search_results {
+    border: 1px solid rgba(0,0,0,.125);
+    background-color: white;
+    position: absolute;
+    width: 100%;
+    height: auto;
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+    .search_results div:hover {
+        cursor: pointer;
+        background-color: lightgray;
+    }
+
+.search_result {
+    /*font-size: 21px;
+    margin-left: 12px*/
+    height: 75px;
+    padding: 10px 10px;
+    border-bottom: 1px solid gray
+}
+
+    .search_result > p:first-child{
+        font-size: 20px;
+    }
+
+    span {
+        position: relative;
+        top: 4px;
+    }

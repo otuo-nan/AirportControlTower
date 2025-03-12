@@ -1,5 +1,109 @@
-﻿<h3>AirlineContacts</h3>
+﻿@page "/airlines"
 
-@code {
+@using AirportControlTower.Dashboard.Components.Shared
+@using AirportControlTower.Dashboard.Dtos
+<PageTitle>Airlines</PageTitle>
 
-}
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex justify-content-between mb-2">
+            <div>
+                <h3>Airlines</h3>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group mb-3">
+                <input autocomplete="off" name="Search" type="text"
+                       class="form-control f-sz-1-em" placeholder="Search..." aria-describedby="basic-addon2"
+                       @bind="@SearchQuery" @bind:event="oninput">
+            </div>
+        </div>
+        <div>
+            <div class="list-table">
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr class="list-heading">
+                            <AuthorizeView Roles="Developer">
+                                <th @onclick="@(() => Sort(nameof(ListAirlineDto.Id)))">
+                                    Id <fa-icon class="@SortIndicator(nameof(ListAirlineDto.Id))"></fa-icon>
+                                </th>
+                            </AuthorizeView>
+                            <th @onclick="@(() =>Sort(nameof(ListAirlineDto.Name)))">
+                                Name <fa-icon class="@SortIndicator(nameof(ListAirlineDto.Name))"></fa-icon>
+                            </th>
+                            <th @onclick="@(() =>Sort(nameof(ListAirlineDto.State)))">
+                                State <fa-icon class="@SortIndicator(nameof(ListAirlineDto.State))"></fa-icon>
+                            </th>
+                            <th @onclick="@(() =>Sort(nameof(ListAirlineDto.CallSign)))">
+                                CallSign <fa-icon class="@SortIndicator(nameof(ListAirlineDto.CallSign))"></fa-icon>
+                            </th> 
+                            <th @onclick="@(() =>Sort(nameof(ListAirlineDto.Type)))">
+                                Type <fa-icon class="@SortIndicator(nameof(ListAirlineDto.Type))"></fa-icon>
+                            </th>
+                            <th> Last known Position </th>
+                            <th @onclick="@(() =>Sort(nameof(ListAirlineDto.LastUpdate)))">
+                                Last update <fa-icon class="@SortIndicator(nameof(ListAirlineDto.LastUpdate))"></fa-icon>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (listEntities == null && _isProcessing)
+                        {
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        }
+                        else if (listEntities == null && !_isProcessing)
+                        {
+                            <h4>No data available</h4>
+                        }
+                        else
+                        {
+                            @foreach (var item in listEntities!)
+                            {
+                                <tr class="list_row" @ondblclick="async () => await ListRow_DbClicked(item)">
+                                    <AuthorizeView Roles="Developer">
+                                        <td>@item.Id</td>
+                                    </AuthorizeView>
+                                    <td>@item.Name</td>
+                                    <td class="@GetStateStatusCss(item.State)">@item.State</td>
+                                    <td>@item.CallSign</td>
+                                    <td>@item.Type</td>
+                                    <td>@GetLastKnownPosition(item.LastKnownPosition)</td>
+                                    <td>@item.LastUpdate.ToString("MMMM dd, yyyy hh:mm tt")</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between">
+            <div>
+                <span>Count: @pageMetaData.TotalCount</span>
+            </div>
+            <Pagination Spread=3 MetaData="pageMetaData" SelectedPage="SelectedPage_Callback"></Pagination>
+        </div>
+
+    </div>
+</div>
+
+@*modal*@
+<div class="modal fade" tabindex="-1" role="dialog" id="details-modal" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <b>Details</b>
+                </h5>
+
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+        </div>
+    </div>
+</div>
