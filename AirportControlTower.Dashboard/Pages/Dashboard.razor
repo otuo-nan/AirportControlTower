@@ -2,6 +2,8 @@
 @using AirportControlTower.Dashboard.Components.Dashboard
 @using AirportControlTower.Dashboard.Dtos
 
+@attribute [Authorize]
+
 @if (Model == null)
 {
     <div class="spinner-border" role="status">

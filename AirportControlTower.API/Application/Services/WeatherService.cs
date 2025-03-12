@@ -42,12 +42,15 @@ namespace AirportControlTower.API.Application.Services
         /// <returns></returns>
         public async Task UpdateLocalWeatherStoreAsync()
         {
-            var weather = await dbContext.Weather.SingleAsync();
-            var openWeather = await GetWeatherInformationAsync(airportSpecs.Lat, airportSpecs.Lon);
+            Weather? weather = await dbContext.Weather.SingleOrDefaultAsync();
 
-            await UpdateWeatherAsync(weather.Id, openWeather);
+            if (weather != null)
+            {
+                var openWeather = await GetWeatherInformationAsync(airportSpecs.Lat, airportSpecs.Lon);
+
+                await UpdateWeatherAsync(weather.Id, openWeather);
+            }
         }
-
 
         #region
         //ToDo: should be just one record?
