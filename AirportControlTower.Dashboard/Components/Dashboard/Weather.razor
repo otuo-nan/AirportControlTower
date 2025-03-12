@@ -1,14 +1,13 @@
 ﻿@using AirportControlTower.Dashboard.Dtos
 
+<div class="weather-container">
+    <div class="weather-card @GetWeatherClass(LastFetchedWeatherData?.Description)">
+        <div class="weather-header">
+            <h2>Current Weather @(LastFetchedWeatherData != null ? GetWeatherEmoji(LastFetchedWeatherData.Description) : "⚠️")</h2>
+        </div>
 
-@if (LastFetchedWeatherData != null)
-{
-    <div class="weather-container">
-        <div class="weather-card">
-            <div class="weather-header">
-                <h2>Current Weather @GetWeatherEmoji(LastFetchedWeatherData.Description)</h2>
-            </div>
-
+        @if (LastFetchedWeatherData != null)
+        {
             <div class="weather-content">
                 <div class="weather-main">
                     <div class="temperature">
@@ -42,31 +41,47 @@
                     <small>🕒 Last Updated: @LastFetchedWeatherData.LastUpdate.ToString("MMM dd, yyyy HH:mm")</small>
                 </div>
             </div>
-        </div>
-    </div>
-}
-else
-{
-    <div class="dashboard-card weather-content weather-unavailable">
-        <div class="weather-error">
-            <div class="error-icon">
-                <span class="large-icon">📡</span>
-            </div>
-            <div class="error-message">
-                <h3>Weather Data Unavailable</h3>
-                <p>Unable to retrieve current weather information.</p>
-                <div class="retry-info">
-                    <span>⏱️ Next update attempt in: <span id="retryTimer">5</span>mins</span>
+
+        }
+        else
+        {
+            <div class="dashboard-card weather-content weather-unavailable">
+                <div class="weather-error">
+                    <div class="error-icon">
+                        <span class="large-icon">📡</span>
+                    </div>
+                    <div class="error-message">
+                        <h3>Weather Data Unavailable</h3>
+                        <p>Unable to retrieve current weather information.</p>
+                        <div class="retry-info">
+                            <span>⏱️ Next update attempt in: <span id="retryTimer">5</span>mins</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        }
     </div>
-}
-
+</div>
 
 @code {
     [Parameter]
     public WeatherData LastFetchedWeatherData { get; set; } = default!;
+
+    private string GetWeatherClass(string? description)
+    {
+        if (string.IsNullOrEmpty(description)) return "weather-unavailable";
+
+        return description?.ToLower() switch
+        {
+            var d when d?.Contains("clear") == true => "weather-clear",
+            var d when d?.Contains("cloud") == true => "weather-cloudy",
+            var d when d?.Contains("rain") == true => "weather-rain",
+            var d when d?.Contains("snow") == true => "weather-snow",
+            var d when d?.Contains("thunder") == true => "weather-storm",
+            var d when d?.Contains("mist") == true || d?.Contains("fog") == true => "weather-mist",
+            _ => "weather-default"
+        };
+    }
 
     static string GetWeatherEmoji(string description) => description?.ToLower() switch
     {

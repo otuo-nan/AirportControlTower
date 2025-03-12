@@ -4,13 +4,48 @@
     /* padding: 20px;*/
 }
 
+/* Base Weather Card Styles */
 .weather-card {
-    background: linear-gradient(135deg, #00b4db, #0083b0);
     border-radius: 15px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     color: white;
     width: 100%;
     overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* Weather-specific gradients */
+.weather-clear {
+    background: linear-gradient(135deg, #FF8C00, #FFD700);
+}
+
+.weather-cloudy {
+    background: linear-gradient(135deg, #626C7D, #2C3E50);
+}
+
+.weather-rain {
+    background: linear-gradient(135deg, #4B79A1, #283E51);
+}
+
+.weather-snow {
+    background: linear-gradient(135deg, #8E9EAB, #EEF2F3);
+    color: #2C3E50; /* Darker text for better contrast */
+}
+
+.weather-storm {
+    background: linear-gradient(135deg, #373B44, #4286f4);
+}
+
+.weather-mist {
+    background: linear-gradient(135deg, #606c88, #3f4c6b);
+}
+
+.weather-default {
+    background: linear-gradient(135deg, #00b4db, #0083b0);
+}
+
+.weather-unavailable {
+    background: linear-gradient(135deg, #757F9A, #D7DDE8);
 }
 
 .weather-header {
