@@ -52,6 +52,20 @@ namespace AirportControlTower.Dashboard.Services
                 logger.LogError(ex.Message);
                 return null;
             }
+        } 
+        
+        public async Task<IEnumerable<StateChangeHistoryDto>?> MostRecentAirlineStateChangeHistory()
+        {
+            try
+            {
+                var httpParams = $"admin/last-n-airline-state-change-reqest-history?n=10";
+                return await httpClient.GetFromJsonAsync<IEnumerable<StateChangeHistoryDto>>(httpParams);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message);
+                return null;
+            }
         }
     }
 }

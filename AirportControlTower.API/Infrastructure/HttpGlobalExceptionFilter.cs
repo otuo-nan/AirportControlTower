@@ -13,14 +13,19 @@ namespace AirportControlTower.API.Infrastructure
             if (context.Exception is PlatformException exception)
             {
                 var statusCode = exception.CustomStatusCode != null ? exception.CustomStatusCode : StatusCodes.Status400BadRequest;
-                var problemDetails = new
+
+                object? problemDetails = null;
+                if (statusCode != StatusCodes.Status409Conflict)
                 {
-                    Title = exception.Message,
-                    Instance = context.HttpContext.Request.Path,
-                    Status = statusCode,
-                    Detail = "Please refer to the errors property for additional details.",
-                    Errors = exception.Errors.ToArray()
-                };
+                    problemDetails = new
+                    {
+                        Title = exception.Message,
+                        Instance = context.HttpContext.Request.Path,
+                        Status = statusCode,
+                        Detail = "Please refer to the errors property for additional details.",
+                        Errors = exception.Errors.ToArray()
+                    };
+                }
 
                 context.Result = new ObjectResult(problemDetails) { StatusCode = statusCode };
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;

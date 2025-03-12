@@ -1,5 +1,6 @@
 ﻿@using AirportControlTower.Dashboard.Dtos
-
+@using AirportControlTower.Dashboard.Services
+@implements IDisposable
 
 @if (Last10AirlineStateChangeHistory.Count() > 0)
 {
@@ -7,7 +8,7 @@
         <div class="card-header">
             <h2>🔄 Recent State Changes</h2>
         </div>
-        <div class="card-content">
+        <div class="card-content list-table">
             <div class="state-changes-list">
                 @foreach (var change in Last10AirlineStateChangeHistory)
                 {
@@ -46,6 +47,9 @@
                 }
             </div>
         </div>
+        <div class="card-content">
+            <p>Last update: @(string.IsNullOrEmpty(LastUpdate) ? "n/a" : LastUpdate)</p>
+        </div>
     </div>
 }
 else
@@ -68,4 +72,53 @@ else
 @code {
     [Parameter]
     public IEnumerable<StateChangeHistoryDto> Last10AirlineStateChangeHistory { get; set; } = default!;
+
+    [Inject]
+    public DashboardService Service { get; set; } = default!;
+
+    [Inject]
+    public ILogger<History> Logger { get; set; } = default!;
+
+    Timer timer = default!;
+    bool isRefreshing = false;
+    string LastUpdate = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        StartRefresh();
+    }
+
+    public void StartRefresh()
+    {
+        timer = new Timer(callback: async (_) => await RefreshAndUpdateUI(),
+                           state: null,
+                           dueTime: TimeSpan.FromSeconds(10),
+                           period: TimeSpan.FromSeconds(10));
+    }
+
+    public async Task RefreshAndUpdateUI()
+    {
+        await GetMostRecentAirlineStateChangeHistory();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public async Task GetMostRecentAirlineStateChangeHistory()
+    {
+        isRefreshing = true;
+        Logger.LogInformation("refreshing history start");
+        await InvokeAsync(StateHasChanged);
+
+        Last10AirlineStateChangeHistory = await Service.MostRecentAirlineStateChangeHistory() ?? Array.Empty<StateChangeHistoryDto>();
+
+        Logger.LogInformation("refreshing history end");
+
+        LastUpdate = DateTime.UtcNow.ToString("HH:mm:ss");
+        isRefreshing = false;
+    }
+
+    //refresh every 10s
+    public void Dispose()
+    {
+        timer.Dispose();
+    }
 }
