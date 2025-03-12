@@ -68,8 +68,8 @@ namespace AirportControlTower.API
                 options.BaseAddress = new Uri(builder.Configuration["OpenWeatherApi:BaseUrl"]!);
             });
 
-            builder.Services.AddQuartzJobs();
             builder.Services.AddHostedService<DbSeeder>();
+            builder.Services.AddQuartzJobs();
 
             builder.Services.AddAuthorization();
 

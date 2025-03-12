@@ -46,3 +46,64 @@
     justify-content: space-between;
     margin: 10px 0;
 }
+
+
+.weather-unavailable {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+    text-align: center;
+}
+
+.weather-error {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 30px;
+    width: 100%;
+}
+
+.error-icon {
+    margin-bottom: 20px;
+}
+
+    .error-icon .large-icon {
+        font-size: 3rem;
+    }
+
+.error-message h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.5rem;
+}
+
+.error-message p {
+    margin: 0 0 20px 0;
+    opacity: 0.9;
+}
+
+.retry-info {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Animation for the retry timer */
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+#retryTimer {
+    animation: pulse 1s infinite;
+    font-weight: bold;
+}

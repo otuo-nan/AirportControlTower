@@ -7,10 +7,6 @@ namespace AirportControlTower.API.Models
     public class Weather
     {
         public Guid Id { get; set; }
-
-        [ForeignKey(nameof(Airline))]
-        public Guid AirlineId { get; set; }
-        public Airline Airline { get; set; } = default!;
         public WeatherData Data { get; set; } = default!;
         public DateTime LastUpdate { get; set; }
     }

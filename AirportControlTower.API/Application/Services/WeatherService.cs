@@ -12,14 +12,15 @@ namespace AirportControlTower.API.Application.Services
     public class WeatherService(HttpClient httpClient,
         AppDbContext dbContext,
         IOptions<OpenWeatherApi> openWeatherApiOptions,
-        IOptions<AirportSpecs> airPortConfigOptions)
+        IOptions<AirportSpecs> airPortConfigOptions,
+        ILogger<WeatherService> logger)
     {
         readonly AirportSpecs airportSpecs = airPortConfigOptions.Value;
         readonly OpenWeatherApi openWeatherApiConfig = openWeatherApiOptions.Value;
 
-        public async Task<WeatherData> GetWeatherInformationAsync(string callSign)
+        public async Task<WeatherData?> GetWeatherInformationAsync(string? callSign = default)
         {
-            var airline = await GetAirlineAsync(callSign);
+            //var airline = await GetAirlineAsync(callSign);
 
             //find local first, if doesnt exist, call the api
             var weather = await GetWeatherAsync();
@@ -31,8 +32,12 @@ namespace AirportControlTower.API.Application.Services
             else
             {
                 var openWeather = await GetWeatherInformationAsync(airportSpecs.Lat, airportSpecs.Lon);
+                if (openWeather != null)
+                {
+                    return await CreateWeatherAsync(openWeather);
+                }
 
-                return await CreateWeatherAsync(airline.Id, openWeather);
+                return default;
             }
         }
 
@@ -44,53 +49,20 @@ namespace AirportControlTower.API.Application.Services
         {
             Weather? weather = await dbContext.Weather.SingleOrDefaultAsync();
 
-            if (weather != null)
-            {
-                var openWeather = await GetWeatherInformationAsync(airportSpecs.Lat, airportSpecs.Lon);
+            var openWeather = await GetWeatherInformationAsync(airportSpecs.Lat, airportSpecs.Lon);
 
-                await UpdateWeatherAsync(weather.Id, openWeather);
+            if (openWeather != null)
+            {
+                if (weather == null)
+                {
+                    _ = await CreateWeatherAsync(openWeather);
+                }
+                else
+                {
+                    await UpdateWeatherAsync(weather.Id, openWeather);
+                }
             }
         }
-
-        #region
-        //ToDo: should be just one record?
-        public async Task<WeatherData> GetWeatherInformationAsyncv1(string callSign)
-        {
-            var airline = await GetAirlineAsync(callSign);
-
-            //find local first, if doesnt exist, call the api
-            var weather = await GetAirlineWeatherAsync(airline.Id);
-
-            if (weather != null)
-            {
-                return weather.Data;
-            }
-            else
-            {
-                var openWeather = await GetWeatherInformationAsync(airportSpecs.Lat, airportSpecs.Lon);
-
-                return await CreateWeatherAsync(airline.Id, openWeather);
-            }
-        }
-
-        /// <summary>
-        /// Used by background service
-        /// </summary>
-        /// <returns></returns>
-        //ToDo: should be just one record?
-        public async Task UpdateLocalWeatherStoreAsyncv1()
-        {
-            var weatherQueriedByAirlines = await dbContext.Weather.ToListAsync();
-
-            foreach (var weather in weatherQueriedByAirlines)
-            {
-                var airline = await GetAirlineAsync(weather.AirlineId);
-                var openWeather = await GetWeatherInformationAsync(airportSpecs.Lat, airportSpecs.Lon);
-
-                await UpdateWeatherAsync(airline.Id, openWeather);
-            }
-        }
-        #endregion
 
         #region helpers
         async Task<Airline> GetAirlineAsync(string callSign)
@@ -98,34 +70,31 @@ namespace AirportControlTower.API.Application.Services
             return await dbContext.Airlines.FirstAsync(a => a.CallSign == callSign);
         }
 
-        async Task<Airline> GetAirlineAsync(Guid id)
-        {
-            return await dbContext.Airlines.FirstAsync(a => a.Id == id);
-        }
-
         async Task<Weather?> GetWeatherAsync()
         {
             return await dbContext.Weather.SingleOrDefaultAsync();
         }
 
-        async Task<Weather?> GetAirlineWeatherAsync(Guid airlineId)
+        async Task<WeatherInformation?> GetWeatherInformationAsync(float lat, float lon)
         {
-            return await dbContext.Weather.FirstOrDefaultAsync(a => a.AirlineId == airlineId);
+            try
+            {
+                var response = await httpClient.GetAsync($"weather?lat={lat}&lon={lon}&appid={openWeatherApiConfig.ApiKey}");
+                response.EnsureSuccessStatusCode();
+                var content = await response.Content.ReadAsStreamAsync();
+                return JsonSerializer.Deserialize<WeatherInformation>(content, Utility.SerializerOptions)!;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("Weather unavailable. \n\n{message}", ex.Message);
+                return default;
+            }
         }
 
-        async Task<WeatherInformation> GetWeatherInformationAsync(float lat, float lon)
-        {
-            var response = await httpClient.GetAsync($"weather?lat={lat}&lon={lon}&appid={openWeatherApiConfig.ApiKey}");
-            response.EnsureSuccessStatusCode();
-            var content = await response.Content.ReadAsStreamAsync();
-            return JsonSerializer.Deserialize<WeatherInformation>(content, Utility.SerializerOptions)!;
-        }
-
-        async Task<WeatherData> CreateWeatherAsync(Guid airlineId, WeatherInformation openWeather)
+        async Task<WeatherData> CreateWeatherAsync(WeatherInformation openWeather)
         {
             var weather = new Weather
             {
-                AirlineId = airlineId,
                 Data = MapOpenWeatherToWeatherData(openWeather),
                 LastUpdate = DateTime.UtcNow,
             };
@@ -136,9 +105,9 @@ namespace AirportControlTower.API.Application.Services
             return weather.Data;
         }
 
-        async Task UpdateWeatherAsync(Guid airlineId, WeatherInformation openWeather)
+        async Task UpdateWeatherAsync(Guid id, WeatherInformation openWeather)
         {
-            await dbContext.Weather.Where(w => w.AirlineId == airlineId).ExecuteUpdateAsync(setter =>
+            await dbContext.Weather.Where(w => w.Id == id).ExecuteUpdateAsync(setter =>
                             setter.SetProperty(p => p.Data, MapOpenWeatherToWeatherData(openWeather))
                                   .SetProperty(p => p.LastUpdate, DateTime.UtcNow));
         }
@@ -158,7 +127,6 @@ namespace AirportControlTower.API.Application.Services
                 LastUpdate = Utility.GetDateTimeNow
             };
         }
-
         #endregion helpers
     }
 }

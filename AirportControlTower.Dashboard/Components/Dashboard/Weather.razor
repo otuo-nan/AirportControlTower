@@ -1,46 +1,67 @@
 ﻿@using AirportControlTower.Dashboard.Dtos
 
-<div class="weather-container">
-    <div class="weather-card">
-        <div class="weather-header">
-            <h2>Current Weather @GetWeatherEmoji(LastFetchedWeatherData.Description)</h2>
-        </div>
 
-        <div class="weather-content">
-            <div class="weather-main">
-                <div class="temperature">
-                    <span class="temp-value">@LastFetchedWeatherData.Temperature°C</span>
-                    <span class="temp-icon">🌡️</span>
-                </div>
-
-                <div class="description">
-                    @LastFetchedWeatherData.Description
-                </div>
+@if (LastFetchedWeatherData != null)
+{
+    <div class="weather-container">
+        <div class="weather-card">
+            <div class="weather-header">
+                <h2>Current Weather @GetWeatherEmoji(LastFetchedWeatherData.Description)</h2>
             </div>
 
-            <div class="weather-details">
-                <div class="detail-item">
-                    <span class="detail-label">💨 Wind Speed:</span>
-                    <span class="detail-value">@LastFetchedWeatherData.Wind.Speed m/s</span>
+            <div class="weather-content">
+                <div class="weather-main">
+                    <div class="temperature">
+                        <span class="temp-value">@LastFetchedWeatherData.Temperature°C</span>
+                        <span class="temp-icon">🌡️</span>
+                    </div>
+
+                    <div class="description">
+                        @LastFetchedWeatherData.Description
+                    </div>
                 </div>
 
-                <div class="detail-item">
-                    <span class="detail-label">🧭 Wind Direction:</span>
-                    <span class="detail-value">@GetWindDirection(LastFetchedWeatherData.Wind.Deg)°</span>
+                <div class="weather-details">
+                    <div class="detail-item">
+                        <span class="detail-label">💨 Wind Speed:</span>
+                        <span class="detail-value">@LastFetchedWeatherData.Wind.Speed m/s</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="detail-label">🧭 Wind Direction:</span>
+                        <span class="detail-value">@GetWindDirection(LastFetchedWeatherData.Wind.Deg)°</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="detail-label">👁️ Visibility:</span>
+                        <span class="detail-value">@(LastFetchedWeatherData.Visibility / 1000) km</span>
+                    </div>
                 </div>
 
-                <div class="detail-item">
-                    <span class="detail-label">👁️ Visibility:</span>
-                    <span class="detail-value">@(LastFetchedWeatherData.Visibility / 1000) km</span>
+                <div class="last-update">
+                    <small>🕒 Last Updated: @LastFetchedWeatherData.LastUpdate.ToString("MMM dd, yyyy HH:mm")</small>
                 </div>
-            </div>
-
-            <div class="last-update">
-                <small>🕒 Last Updated: @LastFetchedWeatherData.LastUpdate.ToString("MMM dd, yyyy HH:mm")</small>
             </div>
         </div>
     </div>
-</div>
+}
+else
+{
+    <div class="dashboard-card weather-content weather-unavailable">
+        <div class="weather-error">
+            <div class="error-icon">
+                <span class="large-icon">📡</span>
+            </div>
+            <div class="error-message">
+                <h3>Weather Data Unavailable</h3>
+                <p>Unable to retrieve current weather information.</p>
+                <div class="retry-info">
+                    <span>⏱️ Next update attempt in: <span id="retryTimer">5</span>mins</span>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 
 @code {

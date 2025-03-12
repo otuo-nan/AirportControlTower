@@ -10,12 +10,14 @@ namespace AirportControlTower.API.Infrastructure.Workers
     {
         public async Task StartAsync(CancellationToken cancellationToken)
         {
+            Console.WriteLine("DbSeeder initialized");
             using var scope = serviceProvider.CreateAsyncScope();
 
             var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
             // dbContext.Database.EnsureDeletedAsync(cancellationToken);
             await dbContext.Database.MigrateAsync(cancellationToken: cancellationToken);
+            Console.WriteLine("database migrated");
 
             if (!await dbContext.Airlines.AnyAsync(cancellationToken))
             {

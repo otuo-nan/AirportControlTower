@@ -123,3 +123,69 @@
 .landed {
     background: #d4edda;
 }
+
+.history-unavailable {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+    padding: 20px;
+    text-align: center;
+}
+
+.history-error {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 30px;
+    width: 100%;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+}
+
+    .history-error .error-icon {
+        margin-bottom: 20px;
+    }
+
+    .history-error .large-icon {
+        font-size: 3rem;
+        color: #6c757d;
+    }
+
+    .history-error .error-message h3 {
+        margin: 0 0 15px 0;
+        color: #495057;
+        font-size: 1.5rem;
+    }
+
+    .history-error .error-message p {
+        margin: 0 0 10px 0;
+        color: #6c757d;
+        font-family: monospace;
+    }
+
+    .history-error .retry-info {
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid rgba(0,0,0,0.1);
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+.retry-timer {
+    font-weight: bold;
+    color: #495057;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
