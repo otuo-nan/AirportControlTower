@@ -240,7 +240,7 @@
   {
     "id": "F05293D4-ACED-4758-1FC5-08DD56634162",
     "name": "Turkish Airlines",
-    "state": "Approach",
+    "state": "Airborne",
     "type": "Airliner",
     "callSign": "THY734",
     "lastKnownPosition": {
