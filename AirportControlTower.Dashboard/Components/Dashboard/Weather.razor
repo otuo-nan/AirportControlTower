@@ -12,7 +12,7 @@
             <div class="weather-content">
                 <div class="weather-main">
                     <div class="temperature">
-                        <span class="temp-value">@LastFetchedWeatherData.Temperature°C</span>
+                        <span class="temp-value">@KelvinToCelcuis(LastFetchedWeatherData.Temperature)°C</span>
                         <span class="temp-icon">🌡️</span>
                     </div>
 
@@ -67,6 +67,11 @@ else
 @code {
     [Parameter]
     public WeatherData LastFetchedWeatherData { get; set; } = default!;
+
+    string KelvinToCelcuis(double kelvin)
+    {
+        return $"{(kelvin - 273.15):N2}";
+    }
 
     static string GetWeatherEmoji(string description) => description?.ToLower() switch
     {
