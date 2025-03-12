@@ -109,11 +109,11 @@ namespace AirportControlTower.Dashboard.Pages
         async Task ListRow_DbClicked(ListAirlineDto dto)
         {
             _airlineDetails = dto;
-            await JS.ShowModalAsync();
+            //await JS.ShowModalAsync();
         }
 
 
-        string GetLastKnownPosition(Position position)
+        static string GetLastKnownPosition(Position position)
         {
             return $"Lat-{position.Latitude}, Lon-{position.Longitude}";
         }

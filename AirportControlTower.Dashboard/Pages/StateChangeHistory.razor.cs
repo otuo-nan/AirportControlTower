@@ -1,7 +1,6 @@
 ﻿using AirportControlTower.Dashboard.Data;
 using AirportControlTower.Dashboard.Dtos;
 using AirportControlTower.Dashboard.Services;
-using AirportControlTower.Dashboard.Utilities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
@@ -109,27 +108,8 @@ namespace AirportControlTower.Dashboard.Pages
         async Task ListRow_DbClicked(StateChangeHistoryDto dto)
         {
             _airlineDetails = dto;
-            await JS.ShowModalAsync();
+            //await JS.ShowModalAsync();
         }
-
-
-        string GetLastKnownPosition(Position position)
-        {
-            return $"Lat-{position.Latitude}, Lon-{position.Longitude}";
-        }
-
-        static string GetStateStatusCss(AirlineState status)
-        {
-            return status switch
-            {
-                AirlineState.Parked => "text-info",
-                AirlineState.TakingOff => "text-danger",
-                AirlineState.Airborne => "text-success",
-                AirlineState.Approach => "text-danger",
-                AirlineState.Landed => "text-primary",
-                _ => string.Empty,
-            };
-        } 
         
         static string GetHistoryStatusCss(HistoryStatus status)
         {
